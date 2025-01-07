@@ -1,0 +1,36 @@
+use gsheet for free db for now (look into firestore if needed [this is nosql])
+
+data:
+team#: int
+match#: int
+alliance1: int
+alliance2: int
+
+auto_leave: bool
+auto_CL1: int
+auto_CL2: int
+auto_CL3: int
+auto_CL4: int
+auto_Pro: int
+auto_Net: int
+auto_desc: string
+auto_rp: bool
+
+tele_CL1: int
+tele_CL2: int
+tele_CL3: int
+tele_CL4: int
+tele_Proc: int
+tele_Net: int
+tele_cycle_time: double (time in seconds)
+tele_priority: string
+
+end_Zone_Park: bool
+end_SC: bool
+end_DC: bool
+
+coral_rp: bool
+hang_rp: bool
+win: bool
+loss: bool
+coop_bonus: bool
