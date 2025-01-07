@@ -1,5 +1,4 @@
 import streamlit as st
-import pyrebase
 version = "0.1.6.2025"
 
 
