@@ -28,10 +28,11 @@ def main():
                 ...
 
             with col3:
-                ...
+                st.write("Raw Data")
+                st.dataframe(df, hide_index=True)
     
     st.divider()
-    st.data_editor(df, hide_index=True)
+    st.dataframe(df, hide_index=True)
 
 
 
