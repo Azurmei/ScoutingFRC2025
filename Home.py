@@ -1,5 +1,5 @@
 import streamlit as st
-version = "0.1.6.2025"
+version = "0.1.25"
 
 
 def main():
