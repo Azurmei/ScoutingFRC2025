@@ -45,7 +45,7 @@ def main():
         tele_cycle_time_coral = st.number_input("Teleop Cycle Time Coral (sec)", value=0)
         tele_cycle_time_Proc = st.number_input("Teleop Cycle Time Processor (sec)", value=0)
         tele_Cycle_time_Net = st.number_input("Teleop Cycle Time Net (sec)", value=0)
-        tele_priority = st.selectbox("Priority Cycles", ("Coral", "Algae"))
+        tele_priority = st.selectbox("Priority Cycles", ("Coral", "Algae", "None"))
         st.divider()
 
         # endgame data
