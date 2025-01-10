@@ -34,3 +34,7 @@ hang_rp: bool
 win: bool
 loss: bool
 coop_bonus: bool
+
+
+TODO:
+- Select header vs match for graph specific data

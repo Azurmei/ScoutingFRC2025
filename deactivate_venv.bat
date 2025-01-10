@@ -1,4 +1,4 @@
 @echo off
 REM Deactivate the python virtual environment
-deactivate
+call venv\Scripts\deactivate.bat
 echo Virtual environment deactivated

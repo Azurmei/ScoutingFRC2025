@@ -17,3 +17,7 @@ sheet = client.open_by_key(sheet_id)
 def append_data(worksheet, data:list) -> bool:
     worksheet.append_row(data)
     return True
+
+def grab_all_data(worksheet):
+    data = worksheet.get_all_values()
+    return data
