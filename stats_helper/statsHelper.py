@@ -3,7 +3,6 @@ from collections import Counter
 
 pd.options.mode.chained_assignment = None
 
-
 auto_score = {
     'leave':    3,
     'CL1':      3,
