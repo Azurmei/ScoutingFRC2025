@@ -1,8 +1,13 @@
 import streamlit as st
 from gs_client.gsClient import client, sheet, append_data
 from data_validate.dataValidate import valid_data_count, check_empty
+from frc_api.frcApi import get_comp_teams
 
 worksheet = sheet.worksheet("Canada")
+
+EVENT_CODE = "BCVI"
+
+TEAM_LIST = get_comp_teams(EVENT_CODE)
 
 def main():
     st.title("Canada Regional Scouting [Input]")
@@ -16,9 +21,9 @@ def main():
         # match data
         st.subheader("Match Data")
         match_number = st.number_input("Match Number", min_value=1, max_value=100, step=1, format="%d")
-        team_number = st.number_input("Team Number", step=1, format="%d")
-        alliance1_number = st.number_input("Alliance 1 Number", step=1, format="%d")
-        alliance2_number = st.number_input("Alliance 2 Number", step=1, format="%d")
+        team_number = st.selectbox("Team Number", TEAM_LIST)
+        alliance1_number = st.selectbox("Alliance 1 Number", TEAM_LIST)
+        alliance2_number = st.selectbox("Alliance 2 Number", TEAM_LIST)
         st.divider()
 
         # auto data

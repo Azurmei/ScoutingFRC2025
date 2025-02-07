@@ -38,3 +38,5 @@ coop_bonus: bool
 
 TODO:
 - Select header vs match for graph specific data
+- Implement FRC API to grab team and match data
+    - Check if data is update in real time 
