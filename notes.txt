@@ -40,3 +40,8 @@ TODO:
 - Select header vs match for graph specific data
 - Implement FRC API to grab team and match data
     - Check if data is update in real time 
+
+TO FIX:
+- team specific raw data graph shows all data not team specific
+- if alliance is set to 0, highest score with specific alliance does not work
+
