@@ -4,7 +4,7 @@ import json
 
 # == Base Defines ==
 # API_KEY = st.secrets["frc_api"]
-API_KEY = 'c2hhbmVtYXRzOjEyOWIwMDhmLWMyOWMtNDg3ZC1iYmJjLTdmMzg4MmE4NDI2NQ=='
+API_KEY = ''
 BASE_URL = 'https://frc-api.firstinspires.org/v3.0'
 SEASON = 2025
 
