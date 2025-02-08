@@ -21,3 +21,7 @@ def append_data(worksheet, data:list) -> bool:
 def grab_all_data(worksheet):
     data = worksheet.get_all_values()
     return data
+
+def check_duplicate(worksheet, data:list) -> bool:
+    exist_data = worksheet.get_all_values()
+    return data in exist_data

@@ -1,7 +1,7 @@
-DATA_LEN = 31
+DATA_LEN = 32
 
 def valid_data_count(data:list) -> bool:
-    # checks to make sure the count of data is 28
+    # checks to make sure the count of data is 32
     return len(data) == DATA_LEN
 
 def check_empty(data:list) -> bool:
@@ -10,3 +10,6 @@ def check_empty(data:list) -> bool:
         if i == None:
             return False
     return True
+
+def check_duplicate_alliance(data:list) -> bool:
+    return len(data) != len(set(data))

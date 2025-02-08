@@ -23,6 +23,7 @@ def main():
     st.write("Note: These stats are based on scouting reports submitted to the GS")
     st.divider()
     unique_team_number = df["Team#"].unique()
+    st.write("Note: Team select is based on data input into the DB. No data will show if the DB is empty")
     selected_team = st.selectbox("Select a Team", unique_team_number)
     if selected_team in unique_team_number:
         team_data = df[df["Team#"] == selected_team]
@@ -30,7 +31,7 @@ def main():
             st.subheader(f"Team {selected_team} Data")
 
             st.write("Raw Data")
-            st.dataframe(df, hide_index=True)
+            st.dataframe(team_data, hide_index=True)
             
             col1, col2 = st.columns(2)
 

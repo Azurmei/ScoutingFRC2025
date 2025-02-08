@@ -1,8 +1,13 @@
 import streamlit as st
-from gs_client.gsClient import client, sheet, append_data
-from data_validate.dataValidate import valid_data_count, check_empty
+from gs_client.gsClient import client, sheet, append_data, check_duplicate
+from data_validate.dataValidate import valid_data_count, check_empty, check_duplicate_alliance
+from frc_api.frcApi import get_comp_teams
 
 worksheet = sheet.worksheet("Canada")
+
+EVENT_CODE = "BCVI"
+
+TEAM_LIST = get_comp_teams(EVENT_CODE)
 
 def main():
     st.title("Canada Regional Scouting [Input]")
@@ -16,9 +21,10 @@ def main():
         # match data
         st.subheader("Match Data")
         match_number = st.number_input("Match Number", min_value=1, max_value=100, step=1, format="%d")
-        team_number = st.number_input("Team Number", step=1, format="%d")
-        alliance1_number = st.number_input("Alliance 1 Number", step=1, format="%d")
-        alliance2_number = st.number_input("Alliance 2 Number", step=1, format="%d")
+        team_number = st.selectbox("Team Number", TEAM_LIST)
+        alliance1_number = st.selectbox("Alliance 1 Number", TEAM_LIST)
+        alliance2_number = st.selectbox("Alliance 2 Number", TEAM_LIST)
+        match_type = st.selectbox("Type of Match", ("Qualification", "Practice", "Elimination"))
         st.divider()
 
         # auto data
@@ -72,8 +78,10 @@ def main():
                 auto_leave, auto_CL1, auto_CL2, auto_CL3, auto_CL4, auto_Proc, auto_Net, auto_desc, auto_rp,
                 teleop_CL1, teleop_CL2, teleop_CL3, teleop_CL4, teleop_Proc, teleop_Net, tele_cycle_time_coral,
                 tele_cycle_time_Proc, tele_Cycle_time_Net, tele_priority, end_zone, end_SC, end_DC, coral_rp, hang_rp, 
-                win, loss,coop_bonus
+                win, loss,coop_bonus, match_type
             ])
+
+            team = [team_number, alliance1_number, alliance2_number]
 
             if not valid_data_count(data):
                 st.error(f"Missing Data: Data len is {len(data)}")
@@ -81,8 +89,14 @@ def main():
             if not check_empty(data):
                 st.error("Some Data Maybe Empty / Null")
             
-            if append_data(worksheet, data):
-                st.success("Data Added")
+            if not check_duplicate_alliance(team):
+                st.error("Duplicate Alliance Number")
+
+            if check_duplicate(worksheet, data):
+                if append_data(worksheet, data):
+                    st.success("Data Added")
+            else:
+                st.error("Duplicate data was trying to be added")
 
 if __name__ == "__main__":
     main()
