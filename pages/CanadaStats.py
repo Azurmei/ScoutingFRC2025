@@ -2,12 +2,17 @@ import streamlit as st
 import pandas as pd
 from gs_client.gsClient import sheet, grab_all_data
 from stats_helper.statsHelper import *
+from frc_api.frcApi import get_comp_ranking
+import matplotlib.pyplot as plt # type: ignore
+import numpy as np
 
 worksheet = sheet.worksheet("Canada")
 
 data = grab_all_data(worksheet)
 
 df = pd.DataFrame(data[1:], columns=data[0])
+
+EVENT_CODE = 'BCVI'
 
 headers = ['auto_leave', 'auto_CL1', 'auto_CL2',	
            'auto_CL3', 'auto_CL4', 'auto_Proc', 
@@ -55,8 +60,68 @@ def main():
                 st.bar_chart(match_win_loss_graph_data(team_data))
 
 
-                
+    st.divider()
+    st.subheader("CanPac Ranking Data")
+    st.write("Note: These stats are based on the FRC API for the regional")
+
+    col1, col2 = st.columns(2)
+
+    ranking_data = get_comp_ranking(EVENT_CODE)
     
+    with col1:
+        st.dataframe(ranking_data, hide_index=True)
+    with col2:
+        selected_data_graph = st.selectbox("Select data to graph", ("W/L/T", "Average Score"))
+
+        match selected_data_graph:
+            case "W/L/T":
+                team_numbers = [team['team#'] for team in ranking_data]
+                wins = [team['wins'] for team in ranking_data]
+                losses = [team['losses'] for team in ranking_data]
+                ties = [team['ties'] for team in ranking_data]
+
+                print(team_numbers)
+
+                fig, ax = plt.subplots()
+
+                y = np.arange(len(team_numbers))
+
+                bar_width = 0.5
+
+                ax.barh(y - bar_width, wins, height=bar_width, label="wins", color="green")
+                ax.barh(y, losses, height=bar_width, label="losses", color="red")
+                ax.barh(y + bar_width, ties, height=bar_width, label="ties", color="yellow")
+
+                ax.set_xlabel("Count")
+                ax.set_ylabel("Team Numbers")
+                ax.set_title("W/L/T by Team")
+                ax.set_yticks(y)
+                ax.set_yticklabels(team_numbers)
+
+                ax.legend()
+
+                st.pyplot(fig)
+
+            case "Average Score":
+                team_numbers = [team['team#'] for team in ranking_data]
+                average_scores = [team['avg_score'] for team in ranking_data]
+
+                y = np.arange(len(team_numbers))
+                bar_width = 0.5
+
+                fig, ax = plt.subplots()
+                ax.barh(y, average_scores, height=bar_width, label="avg_score", color="skyblue")
+                ax.set_xlabel("Average Scores")
+                ax.set_ylabel("Team Numbers")
+                ax.set_title("Team Average Scores")
+                ax.set_yticks(y)
+                ax.set_yticklabels(team_numbers)
+
+                st.pyplot(fig)    
+
+            case _:
+                st.write("Please select data to graph")
+
     st.divider()
     st.subheader("All Teams Raw Data")
     st.dataframe(df, hide_index=True)
