@@ -2,6 +2,7 @@ import pandas as pd
 from collections import Counter
 
 pd.options.mode.chained_assignment = None
+pd.set_option('future.no_silent_downcasting', True)
 
 auto_score = {
     'leave':    3,
@@ -28,6 +29,15 @@ end_score = {
     'SC':       6,
     'DC':       12
 }
+
+headers = ['auto_leave', 'auto_CL1', 'auto_CL2',	
+           'auto_CL3', 'auto_CL4', 'auto_Proc', 
+           'auto_Net', 'auto_desc', 'auto_rp',	
+           'tele_CL1', 'tele_CL2', 'tele_CL3', 
+           'tele_CL4',	'tele_Proc', 'tele_Net',
+           'tele_cycle_time_coral', 'tele_cycle_time_proc',
+           'tele_cycle_time_net',	'end_Zone',	'end_SC', 
+           'end_DC']
 
 # --------
 # Get Priority of game piece for team
@@ -228,3 +238,8 @@ def best_alliance(df:pd.DataFrame) -> str:
     team_wins = pd.concat([selected_df['alliance1'], selected_df['alliance2']]).value_counts()
     sorted_team_wins = team_wins.sort_values(ascending=False)
     return sorted_team_wins
+
+def select_graph_by_match(team_data:pd.DataFrame, select_metric:str) -> pd.DataFrame:
+    return team_data[select_metric]
+
+    

@@ -24,4 +24,7 @@ def grab_all_data(worksheet):
 
 def check_duplicate(worksheet, data:list) -> bool:
     exist_data = worksheet.get_all_values()
+    print(len(exist_data))
+    if len(exist_data) == 1:
+        return False
     return data in exist_data

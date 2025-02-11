@@ -13,3 +13,9 @@ def check_empty(data:list) -> bool:
 
 def check_duplicate_alliance(data:list) -> bool:
     return len(data) != len(set(data))
+
+def check_pass_flag(flags:list) -> bool:
+    for i in flags:
+        if i == False:
+            return False
+    return True

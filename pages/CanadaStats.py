@@ -58,6 +58,19 @@ def main():
                 st.bar_chart(match_point_graph_data(team_data))
                 st.write("Win/Loss Data")
                 st.bar_chart(match_win_loss_graph_data(team_data))
+        
+        st.divider()
+        with st.container():
+
+            st.subheader("Graphs based on user input")
+            st.write("Select a metric to graph")
+            
+            selected_metric = st.selectbox("Select a metric", headers)
+            if selected_metric in headers:
+                st.write(f"Graph of {selected_metric} by match")
+                st.bar_chart(select_graph_by_match(team_data, selected_metric))
+            
+
 
 
     st.divider()
@@ -79,8 +92,6 @@ def main():
                 wins = [team['wins'] for team in ranking_data]
                 losses = [team['losses'] for team in ranking_data]
                 ties = [team['ties'] for team in ranking_data]
-
-                print(team_numbers)
 
                 fig, ax = plt.subplots()
 

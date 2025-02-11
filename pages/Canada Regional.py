@@ -1,6 +1,6 @@
 import streamlit as st
 from gs_client.gsClient import client, sheet, append_data, check_duplicate
-from data_validate.dataValidate import valid_data_count, check_empty, check_duplicate_alliance
+from data_validate.dataValidate import valid_data_count, check_empty, check_duplicate_alliance, check_pass_flag
 from frc_api.frcApi import get_comp_teams
 
 worksheet = sheet.worksheet("Canada")
@@ -8,6 +8,8 @@ worksheet = sheet.worksheet("Canada")
 EVENT_CODE = "BCVI"
 
 TEAM_LIST = get_comp_teams(EVENT_CODE)
+
+pass_flag = [False, False, False, False]
 
 def main():
     st.title("Canada Regional Scouting [Input]")
@@ -85,18 +87,25 @@ def main():
 
             if not valid_data_count(data):
                 st.error(f"Missing Data: Data len is {len(data)}")
+            else: pass_flag[0] = True
             
             if not check_empty(data):
                 st.error("Some Data Maybe Empty / Null")
+            else: pass_flag[1] = True
             
-            if not check_duplicate_alliance(team):
+            if check_duplicate_alliance(team):
                 st.error("Duplicate Alliance Number")
+            else: pass_flag[2] = True
+            
 
             if check_duplicate(worksheet, data):
+                 st.error("Duplicate data was trying to be added")
+            else: pass_flag[3] = True
+            
+            if check_pass_flag(pass_flag):
                 if append_data(worksheet, data):
                     st.success("Data Added")
-            else:
-                st.error("Duplicate data was trying to be added")
+                
 
 if __name__ == "__main__":
     main()
