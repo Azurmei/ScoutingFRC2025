@@ -2,6 +2,7 @@ import streamlit as st
 from gs_client.gsClient import client, sheet, append_data, check_duplicate
 from data_validate.dataValidate import valid_data_count, check_empty, check_duplicate_alliance, check_pass_flag
 from frc_api.frcApi import get_comp_teams
+import time
 
 worksheet = sheet.worksheet("Canada")
 
@@ -11,10 +12,46 @@ TEAM_LIST = get_comp_teams(EVENT_CODE)
 
 pass_flag = [False, False, False, False]
 
+if "running" not in st.session_state:
+    st.session_state.running = False
+if "start_time" not in st.session_state:
+    st.session_state.start_time = None
+if "elapsed_time" not in st.session_state:
+    st.session_state.elapsed_time = 0
+if "record_time" not in st.session_state:
+    st.session_state.record_time = None
+
+def start_stopwatch():
+    if not st.session_state.running:
+        st.session_state.running = True
+        st.session_state.start_time = time.time() - st.session_state.elapsed_time
+
+def stop_stopwatch():
+    if st.session_state.running:
+        st.session_state.running = False
+        st.session_state.elapsed_time = time.time() - st.session_state.start_time
+        st.session_state.record_time = st.session_state.elapsed_time
+
 def main():
     st.title("Canada Regional Scouting [Input]")
     st.write("Please be sure all fields are filled in in order to submit data")
     st.divider()
+    #stopwatch 
+    with st.container():
+        col1, col2 = st.columns(2)
+        with col1:
+            if st.button("Start"):
+                start_stopwatch()
+        with col2:
+            if st.button("Stop"):
+                stop_stopwatch()
+        if st.session_state.running:
+            st.session_state.elapsed_time = time.time() - st.session_state.start_time
+        st.metric("Elapsed Time", f"{st.session_state.elapsed_time:.2f} sec")
+
+        if st.session_state.record_time is not None:
+            st.success(f"Recorded Time: {st.session_state.record_time:.2f} sec")
+        st.divider()
     # Create a form with input fields
     with st.form("match data"):
 
