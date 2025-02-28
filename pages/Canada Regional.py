@@ -85,7 +85,7 @@ def main():
         teleop_CL2 = st.number_input("Teleop CL2", value=0)
         teleop_CL3 = st.number_input("Teleop CL3", value=0)
         teleop_CL4 = st.number_input("Teleop CL4", value=0)
-        coral_miss = st.numer_input("Missed Coral", value=0)
+        coral_miss = st.number_input("Missed Coral", value=0)
         teleop_Proc = st.number_input("Teleop Processor", value=0)
         teleop_Net = st.number_input("Teleop Net", value=0)
         tele_cycle_time_coral = st.number_input("Teleop Cycle Time Coral (sec)", value=0)
