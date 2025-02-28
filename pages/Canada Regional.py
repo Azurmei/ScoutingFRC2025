@@ -48,12 +48,14 @@ def main():
         teleop_CL2 = st.number_input("Teleop CL2", value=0)
         teleop_CL3 = st.number_input("Teleop CL3", value=0)
         teleop_CL4 = st.number_input("Teleop CL4", value=0)
+        coral_miss = st.numer_input("Missed Coral", value=0)
         teleop_Proc = st.number_input("Teleop Processor", value=0)
         teleop_Net = st.number_input("Teleop Net", value=0)
         tele_cycle_time_coral = st.number_input("Teleop Cycle Time Coral (sec)", value=0)
         tele_cycle_time_Proc = st.number_input("Teleop Cycle Time Processor (sec)", value=0)
         tele_Cycle_time_Net = st.number_input("Teleop Cycle Time Net (sec)", value=0)
         tele_priority = st.selectbox("Priority Cycles", ("Coral", "Algae", "None"))
+        tele_cycle_option = st.toggle("Cycled in match?", value=False)
         st.divider()
 
         # endgame data
@@ -71,6 +73,7 @@ def main():
         win = st.toggle("Win", value=False)
         loss = st.toggle("Loss", value=False)
         coop_bonus = st.toggle("Coop Bonus", value=False)
+        tied = st.toggle("Tied", value=False)
         st.divider()
 
         submitted = st.form_submit_button("Submit")
@@ -81,7 +84,7 @@ def main():
                 auto_leave, auto_CL1, auto_CL2, auto_CL3, auto_CL4, auto_Proc, auto_Net, auto_desc, auto_rp,
                 teleop_CL1, teleop_CL2, teleop_CL3, teleop_CL4, teleop_Proc, teleop_Net, tele_cycle_time_coral,
                 tele_cycle_time_Proc, tele_Cycle_time_Net, tele_priority, end_zone, end_SC, end_DC, coral_rp, hang_rp, 
-                win, loss,coop_bonus, match_type, driver_perf
+                win, loss,coop_bonus, match_type, driver_perf, tied, coral_miss, tele_cycle_option
             ])
 
             team = [team_number, alliance1_number, alliance2_number]

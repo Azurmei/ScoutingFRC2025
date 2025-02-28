@@ -42,11 +42,12 @@ def main():
 
             with col1:
                 st.metric("Priority", get_priority(team_data))
-                st.metric("Average RP per Match", average_rp(team_data))
-                st.metric("Average Auto Score", average_auto_points(team_data))
-                st.metric("Average Teleop Score", average_teleop_points(team_data))
+                st.metric("Average RP per Match", round(average_rp(team_data), 2))
+                st.metric("Average Auto Score", round(average_auto_points(team_data), 2))
+                st.metric("Average Teleop Score", round(average_teleop_points(team_data), 2))
+                st.metric("Coral Success %", round(get_coral_success(team_data), 2))
                 st.metric("End Game Priority", endgame_priority(team_data))
-                st.metric("Win %", win_percentage(team_data))
+                st.metric("Win %", round(win_percentage(team_data), 2))
                 st.metric("Highest Score", highest_score(team_data))
                 st.metric("Highest Score Alliance", highest_score_alliance(team_data))
                 st.write("Highest wins based on alliance")

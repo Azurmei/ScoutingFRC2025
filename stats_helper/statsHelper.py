@@ -37,7 +37,7 @@ headers = ['auto_leave', 'auto_CL1', 'auto_CL2',
            'tele_CL4',	'tele_Proc', 'tele_Net',
            'tele_cycle_time_coral', 'tele_cycle_time_proc',
            'tele_cycle_time_net',	'end_Zone',	'end_SC', 
-           'end_DC']
+           'end_DC', 'coral_miss']
 
 # --------
 # Get Priority of game piece for team
@@ -58,6 +58,26 @@ def average_rp(df:pd.DataFrame) -> float:
     row_sums = selected_df.sum(axis=1)
     average_row_sum = row_sums.mean()
     return average_row_sum
+
+# --------
+# Get success rate of coral
+# --------
+def get_coral_success(df:pd.DataFrame) -> float:
+    selected_cols = ['auto_CL1', 'auto_CL2',	
+           'auto_CL3', 'auto_CL4','tele_CL1', 'tele_CL2', 'tele_CL3', 
+           'tele_CL4', 'coral_miss']
+    selected_df = df[selected_cols].copy()
+    selected_df = selected_df.apply(pd.to_numeric, errors='coerce').fillna(0).astype(int)
+
+    total_success = selected_df[selected_cols[:-1]].sum().sum()
+
+    total_attempts = total_success + selected_df['coral_miss'].sum()
+
+    if total_attempts == 0:
+        return 0
+    
+    return (total_success/ total_attempts)* 100
+
 
 # --------
 # Get Average points scored in match - AUTO

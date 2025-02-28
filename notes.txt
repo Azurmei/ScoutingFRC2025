@@ -38,6 +38,10 @@ coop_bonus: bool
 
 TODO:
 - Select header vs match for graph specific data
+- tied outcome [x]
+- reduce decimals for stats [x]
+- missed coral [x]
+- cycle not optional, n/a option
 
 TO FIX:
 
