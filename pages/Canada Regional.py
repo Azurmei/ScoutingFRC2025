@@ -61,6 +61,7 @@ def main():
         end_zone = st.toggle("Zone Park", value=False)
         end_SC = st.toggle("Shallow Carriage Hang", value=False)
         end_DC = st.toggle("Deep Carriage Hang", value=False)
+        driver_perf = st.text_input("Driver Performance", value="N/A")
         st.divider()
 
         # end of match data
@@ -80,7 +81,7 @@ def main():
                 auto_leave, auto_CL1, auto_CL2, auto_CL3, auto_CL4, auto_Proc, auto_Net, auto_desc, auto_rp,
                 teleop_CL1, teleop_CL2, teleop_CL3, teleop_CL4, teleop_Proc, teleop_Net, tele_cycle_time_coral,
                 tele_cycle_time_Proc, tele_Cycle_time_Net, tele_priority, end_zone, end_SC, end_DC, coral_rp, hang_rp, 
-                win, loss,coop_bonus, match_type
+                win, loss,coop_bonus, match_type, driver_perf
             ])
 
             team = [team_number, alliance1_number, alliance2_number]
