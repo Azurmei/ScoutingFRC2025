@@ -24,7 +24,7 @@ headers = ['auto_leave', 'auto_CL1', 'auto_CL2',
            'end_DC']
 
 def main():
-    st.title("Canada Regional Stats")
+    st.title("Hawaii Regional Stats")
     st.write("Note: These stats are based on scouting reports submitted to the GS")
     st.divider()
     unique_team_number = df["Team#"].unique()

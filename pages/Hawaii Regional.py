@@ -33,7 +33,7 @@ def stop_stopwatch():
         st.session_state.record_time = st.session_state.elapsed_time
 
 def main():
-    st.title("Canada Regional Scouting [Input]")
+    st.title("Hawaii Regional Scouting [Input]")
     st.write("Please be sure all fields are filled in in order to submit data")
     st.divider()
     #stopwatch 
