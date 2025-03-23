@@ -45,7 +45,7 @@ def main():
                 st.metric("Average RP per Match", round(average_rp(team_data), 2))
                 st.metric("Average Auto Score", round(average_auto_points(team_data), 2))
                 st.metric("Average Teleop Score", round(average_teleop_points(team_data), 2))
-                st.metric("Average coral scored", round(average_coral_scored(team_data), 2))
+                st.metric("Average coral count", round(average_coral_scored(team_data), 2))
                 st.metric("Coral Success %", round(get_coral_success(team_data), 2))
                 st.metric("End Game Priority", endgame_priority(team_data))
                 st.metric("Win %", round(win_percentage(team_data), 2))
