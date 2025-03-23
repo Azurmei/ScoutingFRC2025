@@ -76,7 +76,7 @@ def main():
 
 
     st.divider()
-    st.subheader("CanPac Ranking Data")
+    st.subheader("Hawaii Ranking Data")
     st.write("Note: These stats are based on the FRC API for the regional")
 
     col1, col2 = st.columns(2)
