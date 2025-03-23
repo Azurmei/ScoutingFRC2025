@@ -262,4 +262,20 @@ def best_alliance(df:pd.DataFrame) -> str:
 def select_graph_by_match(team_data:pd.DataFrame, select_metric:str) -> pd.DataFrame:
     return team_data[select_metric]
 
+# --------
+# Average coral scored in matches
+# --------
+def average_coral_scored(df:pd.DataFrame) -> float:
+    selected_cols = ["auto_CL1", "auto_CL2", "auto_CL3", "auto_CL4", "tele_CL1", "tele_CL2", "tele_CL3", "tele_CL4"]
+    selected_df = df[selected_cols]
+    selected_df.loc[:,selected_cols] = selected_df[selected_cols].apply(lambda col: pd.to_numeric(col, errors='coerce').astype(int))
+    selected_df = selected_df.reset_index(drop=True)
+    total_sum = selected_df.sum().sum()
+    num_matches = selected_df.shape[0]
+    average = total_sum / num_matches
+    return average
+
+
+
+
     
