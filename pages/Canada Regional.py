@@ -4,6 +4,10 @@ from data_validate.dataValidate import valid_data_count, check_empty, check_dupl
 from frc_api.frcApi import get_comp_teams
 import time
 
+
+st.write("Loaded secrets:", st.secrets)
+
+
 worksheet = sheet.worksheet("Canada")
 
 EVENT_CODE = "BCVI"
@@ -60,9 +64,9 @@ def main():
         # match data
         st.subheader("Match Data")
         match_number = st.number_input("Match Number", min_value=1, max_value=100, step=1, format="%d")
-        team_number = st.selectbox("Team Number", TEAM_LIST)
-        alliance1_number = st.selectbox("Alliance 1 Number", TEAM_LIST)
-        alliance2_number = st.selectbox("Alliance 2 Number", TEAM_LIST)
+        team_number = st.selectbox("Team Number",TEAM_LIST)
+        alliance1_number = st.selectbox("Alliance 1 Number",TEAM_LIST)
+        alliance2_number = st.selectbox("Alliance 2 Number",TEAM_LIST)
         match_type = st.selectbox("Type of Match", ("Qualification", "Practice", "Elimination"))
         st.divider()
 
@@ -88,9 +92,6 @@ def main():
         coral_miss = st.number_input("Missed Coral", value=0)
         teleop_Proc = st.number_input("Teleop Processor", value=0)
         teleop_Net = st.number_input("Teleop Net", value=0)
-        tele_cycle_time_coral = st.number_input("Teleop Cycle Time Coral (sec)", value=0)
-        tele_cycle_time_Proc = st.number_input("Teleop Cycle Time Processor (sec)", value=0)
-        tele_Cycle_time_Net = st.number_input("Teleop Cycle Time Net (sec)", value=0)
         tele_priority = st.selectbox("Priority Cycles", ("Coral", "Algae", "None"))
         tele_cycle_option = st.toggle("Cycled in match?", value=False)
         st.divider()
@@ -119,8 +120,7 @@ def main():
             data.extend([
                 match_number, team_number, alliance1_number, alliance2_number,
                 auto_leave, auto_CL1, auto_CL2, auto_CL3, auto_CL4, auto_Proc, auto_Net, auto_desc, auto_rp,
-                teleop_CL1, teleop_CL2, teleop_CL3, teleop_CL4, teleop_Proc, teleop_Net, tele_cycle_time_coral,
-                tele_cycle_time_Proc, tele_Cycle_time_Net, tele_priority, end_zone, end_SC, end_DC, coral_rp, hang_rp, 
+                teleop_CL1, teleop_CL2, teleop_CL3, teleop_CL4, teleop_Proc, teleop_Net, tele_priority, end_zone, end_SC, end_DC, coral_rp, hang_rp, 
                 win, loss,coop_bonus, match_type, driver_perf, tied, coral_miss, tele_cycle_option
             ])
 
