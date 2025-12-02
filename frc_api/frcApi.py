@@ -3,7 +3,7 @@ import requests
 import streamlit as st
 
 BASE_URL = "https://frc-api.firstinspires.org/v3.0"
-SEASON = 2024
+SEASON = 2025
 
 USERNAME = st.secrets["frcapi"]["username"]
 AUTH = st.secrets["frcapi"]["auth"]
