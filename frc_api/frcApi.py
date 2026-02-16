@@ -1,35 +1,29 @@
-import base64
-import requests
 import streamlit as st
+import requests
 
-BASE_URL = "https://frc-api.firstinspires.org/v3.0"
-SEASON = 2025
+TBA_API_KEY = st.secrets["tba"]["api_key"]
 
-USERNAME = st.secrets["frcapi"]["username"]
-AUTH = st.secrets["frcapi"]["auth"]
+BASE_URL = "https://www.thebluealliance.com/api/v3"
 
-# Combine and encode
-token_raw = f"{USERNAME}:{AUTH}"
-token_bytes = token_raw.encode("ascii")
-auth_token = base64.b64encode(token_bytes).decode("ascii")
-
-headers = {
-    "Authorization": f"Basic {auth_token}",
-    "Accept": "application/json"
+HEADERS = {
+    "X-TBA-Auth-Key": TBA_API_KEY
 }
 
+def get_comp_teams(event_code, season=2025):
+    """
+    event_code example: "bcvi"
+    season example: 2025
+    """
 
-def get_comp_teams(eventCode: str) -> list:
-    team_list = []
-    url = f"{BASE_URL}/{SEASON}/teams?eventCode={eventCode}"
+    event_key = f"{season}{event_code.lower()}"
+    url = f"{BASE_URL}/event/{event_key}/teams"
 
-    response = requests.get(url, headers=headers)
+    response = requests.get(url, headers=HEADERS)
 
-    if response.status_code == 200:
-        data = response.json()
-        for t in data["teams"]:
-            team_list.append(t["teamNumber"])
-    else:
-        st.error(f"API Error: {response.status_code} — {response.text}")
+    if response.status_code != 200:
+        raise Exception(f"TBA Error {response.status_code}: {response.text}")
 
-    return team_list
+    teams = response.json()
+
+    # Return sorted team numbers only
+    return sorted([team["team_number"] for team in teams])

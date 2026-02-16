@@ -14,7 +14,7 @@ def main():
     #st.success("Analytics and Form implemented for Hawaii Regional")
     st.divider()
     st.write("This app is designed to help teams collect and analyze data from the 2025 FRC season.")
-    st.write("For any issues or suggestions, please contact Lily :D...Thanks!")
+    st.write("For any issues or suggestions, please contact Lily via discord or email...Thanks!")
 
 
 

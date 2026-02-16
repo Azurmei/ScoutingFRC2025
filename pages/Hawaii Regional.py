@@ -6,9 +6,9 @@ import time
 
 worksheet = sheet.worksheet("Hawaii")
 
-EVENT_CODE = "HIHO"
-
-TEAM_LIST = get_comp_teams(EVENT_CODE)
+SEASON = st.selectbox("Season",)
+EVENT_CODE = "hiho"
+TEAM_LIST = get_comp_teams(EVENT_CODE,season = SEASON)
 
 CYCLE_SPEED = [x for x in range(0, 20)]
 
