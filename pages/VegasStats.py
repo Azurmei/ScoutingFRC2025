@@ -6,13 +6,13 @@ from frc_api.frcApi import get_comp_ranking
 import matplotlib.pyplot as plt # type: ignore
 import numpy as np
 
-worksheet = sheet.worksheet("Canada")
+worksheet = sheet.worksheet("Vegas")
 
 data = grab_all_data(worksheet)
 
 df = pd.DataFrame(data[1:], columns=data[0])
 
-EVENT_CODE = 'BCVI'
+EVENT_CODE = 'nvlv'
 
 headers = ['auto_leave', 'auto_CL1', 'auto_CL2',	
            'auto_CL3', 'auto_CL4', 'auto_Proc', 
@@ -24,7 +24,7 @@ headers = ['auto_leave', 'auto_CL1', 'auto_CL2',
            'end_DC']
 
 def main():
-    st.title("Canada Regional Stats")
+    st.title("Vegas Regional Stats")
     st.write("Note: These stats are based on scouting reports submitted to the GS")
     st.divider()
     unique_team_number = df["Team#"].unique()
