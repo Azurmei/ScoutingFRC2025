@@ -4,7 +4,7 @@ from gs_client.gsClient import client, sheet, append_data, check_duplicate
 from data_validate.dataValidate import valid_data_count, check_empty, check_duplicate_alliance, check_pass_flag
 
 # ===== Google Sheet =====
-worksheet = sheet.worksheet("Hawaii")
+worksheet = sheet.worksheet("HAWAII_MATCHES")
 
 # ===== Blue Alliance =====
 TBA_KEY = st.secrets["tba"]["api_key"]
