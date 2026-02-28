@@ -2,28 +2,61 @@ import streamlit as st
 import requests
 
 TBA_API_KEY = st.secrets["tba"]["api_key"]
-
 BASE_URL = "https://www.thebluealliance.com/api/v3"
 
-HEADERS = {
+headers = {
     "X-TBA-Auth-Key": TBA_API_KEY
 }
 
-def get_comp_teams(event_code, season=2025):
+def get_comp_teams(event_key: str) -> list:
     """
-    event_code example: "bcvi"
-    season example: 2025
+    Returns a list of team numbers attending an event.
+    Example event_key: '2026hiho'
     """
+    team_list = []
 
-    event_key = f"{season}{event_code.lower()}"
     url = f"{BASE_URL}/event/{event_key}/teams"
+    response = requests.get(url, headers=headers)
 
-    response = requests.get(url, headers=HEADERS)
+    if response.status_code == 200:
+        raw_data = response.json()
 
-    if response.status_code != 200:
-        raise Exception(f"TBA Error {response.status_code}: {response.text}")
+        for team in raw_data:
+            # team_key format: 'frc3005'
+            team_number = int(team["team_key"].replace("frc", ""))
+            team_list.append(team_number)
 
-    teams = response.json()
+    return team_list
 
-    # Return sorted team numbers only
-    return sorted([team["team_number"] for team in teams])
+
+def get_comp_ranking(event_key: str) -> list:
+    """
+    Returns ranking data for an event.
+    Example event_key: '2026hiho'
+    """
+    team_list = []
+
+    url = f"{BASE_URL}/event/{event_key}/rankings"
+    response = requests.get(url, headers=headers)
+
+    if response.status_code == 200:
+        raw_data = response.json()
+
+        rank_data = raw_data.get("rankings", [])
+
+        for rank in rank_data:
+            team_number = int(rank["team_key"].replace("frc", ""))
+
+            team_data = {
+                "team#": team_number,
+                "rank": rank.get("rank"),
+                "wins": rank.get("record", {}).get("wins"),
+                "losses": rank.get("record", {}).get("losses"),
+                "ties": rank.get("record", {}).get("ties"),
+                "matches": rank.get("matches_played"),
+                "avg_score": rank.get("sort_orders", [None])[0]
+            }
+
+            team_list.append(team_data)
+
+    return team_list
