@@ -1,62 +1,68 @@
 import streamlit as st
 import requests
+from requests.auth import HTTPBasicAuth
 
-TBA_API_KEY = st.secrets["tba"]["api_key"]
-BASE_URL = "https://www.thebluealliance.com/api/v3"
+BASE_URL = st.secrets["first"]["base_url"]
+SEASON = st.secrets["first"]["season"]
+USERNAME = st.secrets["first"]["username"]
+AUTH_KEY = st.secrets["first"]["auth_key"]
 
-headers = {
-    "X-TBA-Auth-Key": TBA_API_KEY
-}
 
-def get_comp_teams(event_key: str) -> list:
+def get_comp_teams(event_code: str) -> list:
     """
     Returns a list of team numbers attending an event.
-    Example event_key: '2026hiho'
+    Example event_code: 'HIHO' or 'Hawaii'
     """
+
     team_list = []
 
-    url = f"{BASE_URL}/event/{event_key}/teams"
-    response = requests.get(url, headers=headers)
+    url = f"{BASE_URL}/{SEASON}/teams?eventCode={event_code}"
+
+    response = requests.get(
+        url,
+        auth=HTTPBasicAuth(USERNAME, AUTH_KEY)
+    )
 
     if response.status_code == 200:
         raw_data = response.json()
+        teams = raw_data.get("teams", [])
 
-        for team in raw_data:
-            # team_key format: 'frc3005'
-            team_number = int(team["team_key"].replace("frc", ""))
-            team_list.append(team_number)
+        for team in teams:
+            team_list.append(team.get("teamNumber"))
 
     return team_list
 
 
-def get_comp_ranking(event_key: str) -> list:
+def get_comp_ranking(event_code: str) -> list:
     """
     Returns ranking data for an event.
-    Example event_key: '2026hiho'
+    Example event_code: 'HIHO'
     """
-    team_list = []
 
-    url = f"{BASE_URL}/event/{event_key}/rankings"
-    response = requests.get(url, headers=headers)
+    ranking_list = []
+
+    url = f"{BASE_URL}/{SEASON}/rankings/{event_code}"
+
+    response = requests.get(
+        url,
+        auth=HTTPBasicAuth(USERNAME, AUTH_KEY)
+    )
 
     if response.status_code == 200:
         raw_data = response.json()
+        rankings = raw_data.get("Rankings", [])
 
-        rank_data = raw_data.get("rankings", [])
-
-        for rank in rank_data:
-            team_number = int(rank["team_key"].replace("frc", ""))
-
+        for rank in rankings:
             team_data = {
-                "team#": team_number,
+                "team#": rank.get("teamNumber"),
                 "rank": rank.get("rank"),
-                "wins": rank.get("record", {}).get("wins"),
-                "losses": rank.get("record", {}).get("losses"),
-                "ties": rank.get("record", {}).get("ties"),
-                "matches": rank.get("matches_played"),
-                "avg_score": rank.get("sort_orders", [None])[0]
+                "wins": rank.get("wins"),
+                "losses": rank.get("losses"),
+                "ties": rank.get("ties"),
+                "matches": rank.get("matchesPlayed"),
+                "avg_score": rank.get("sortOrder1")  # depends on season game metrics
             }
 
-            team_list.append(team_data)
+            ranking_list.append(team_data)
 
-    return team_list
+    return ranking_list
