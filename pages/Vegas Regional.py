@@ -4,7 +4,7 @@ from data_validate.dataValidate import valid_data_count, check_empty, check_dupl
 from frc_api.frcApi import get_comp_teams
 import time
 
-worksheet = sheet.worksheet("Hawaii")
+worksheet = sheet.worksheet("VEGAS_MATCHES")
 
 EVENT_CODE = "NVLV"
 
