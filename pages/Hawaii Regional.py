@@ -4,8 +4,6 @@ from data_validate.dataValidate import valid_data_count, check_empty, check_dupl
 from frc_api.frcApi import get_comp_teams
 import time
 
-worksheet = sheet.worksheet("HAWAII_MATCHES")
-
 EVENT_CODE = "HIHO"
 
 TEAM_LIST = get_comp_teams(EVENT_CODE)
@@ -14,7 +12,13 @@ CYCLE_SPEED = [x for x in range(0, 20)]
 
 pass_flag = [False, False, False, False]
 
-
+# Safe worksheet access — only change here
+try:
+    worksheet = sheet.worksheet("HAWAII_MATCHES")
+except Exception:  # WorksheetNotFound
+    worksheet = sheet.add_worksheet(title="HAWAII_MATCHES", rows="100", cols="50")
+    st.info("HAWAII_MATCHES tab created automatically")
+    
 def main():
     st.title("Hawaii Regional Scouting [Input]")
     st.write("Please be sure all fields are filled in in order to submit data")
