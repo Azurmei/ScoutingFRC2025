@@ -12,13 +12,7 @@ CYCLE_SPEED = [x for x in range(0, 20)]
 
 pass_flag = [False, False, False, False]
 
-# Safe worksheet access — only change here
-try:
-    worksheet = sheet.worksheet("HAWAII_MATCHES")
-except Exception:  # WorksheetNotFound
-    worksheet = sheet.add_worksheet(title="HAWAII_MATCHES", rows="100", cols="50")
-    st.info("HAWAII_MATCHES tab created automatically")
-    
+worksheet = sheet.worksheet("HAWAII_MATCHES")
 def main():
     st.title("Hawaii Regional Scouting [Input]")
     st.write("Please be sure all fields are filled in in order to submit data")
