@@ -36,48 +36,33 @@ def main():
         # auto data
         st.subheader("Autonomous Period")
         auto_leave = st.toggle("Auto Leave Zone", value=False)
-        auto_CL1 = st.number_input("Auto CL1", value=0)
-        auto_CL2 = st.number_input("Auto CL2", value=0)
-        auto_CL3 = st.number_input("Auto CL3", value=0)
-        auto_CL4 = st.number_input("Auto CL4", value=0)
-        auto_Proc = st.number_input("Auto Processor", value=0)
-        auto_Net = st.number_input("Auto Net", value=0)
+        auto_fuel_count = st.number_input("Auto Total Fuel", value=0)
         auto_desc = st.text_input("Auto Description / Notes", value="N/A")
-        auto_rp = st.toggle("Auto RP", value=False)
+        
         st.divider()
 
         # teleop data
         st.subheader("Teleop Period")
-        teleop_CL1 = st.number_input("Teleop CL1", value=0)
-        teleop_CL2 = st.number_input("Teleop CL2", value=0)
-        teleop_CL3 = st.number_input("Teleop CL3", value=0)
-        teleop_CL4 = st.number_input("Teleop CL4", value=0)
-        coral_miss = st.number_input("Missed Coral", value=0)
-        teleop_Proc = st.number_input("Teleop Processor", value=0)
-        teleop_Net = st.number_input("Teleop Net", value=0)
-        tele_cycle_time_coral = st.selectbox("Teleop Cycle Time Coral", CYCLE_SPEED)
-        tele_cycle_time_Proc = st.selectbox("Teleop Cycle Time Processor", CYCLE_SPEED)
-        tele_Cycle_time_Net = st.selectbox("Teleop Cycle Time Net", CYCLE_SPEED)
-        tele_priority = st.selectbox("Priority Cycles", ("Coral", "Algae", "Defense"))
+        teleop_fuel_count = st.number_input("Teleop Fuel Count", value=0)
         tele_cycle_option = st.toggle("Cycled in match?", value=False)
+        tele_cycle_Count = st.number_input("Teleop Cycle Count", value=0)
+        tele_priority = st.selectbox("Priority Cycles", ("Fuel", "Passing", "Defense"))
+        
         st.divider()
 
         # endgame data
         st.subheader("End Game")
-        end_zone = st.toggle("Zone Park", value=False)
-        end_SC = st.toggle("Shallow Carriage Hang", value=False)
-        end_DC = st.toggle("Deep Carriage Hang", value=False)
+        end_hang = st.selectbox("End Hang Level", ("None", "HL1", "HL2", "HL3"))
+        
         driver_perf = st.text_input("Driver Performance", value="N/A")
         st.divider()
 
         # end of match data
         st.subheader("End of Match")
-        coral_rp = st.toggle("Coral RP", value=False)
-        hang_rp = st.toggle("Hang RP", value=False)
-        win = st.toggle("Win", value=False)
-        loss = st.toggle("Loss", value=False)
-        coop_bonus = st.toggle("Coop Bonus", value=False)
-        tied = st.toggle("Tied", value=False)
+        energized_rp = st.toggle("Energized RP", value=False)
+        supercharged_rp = st.toggle("Supercharged RP", value=False)
+        traversal_rp = st.toggle("Traversal RP", value=False)
+        result = st.selectbox("Match Result", ("Win", "Loss","tied"))
         st.divider()
         
         # Other comments
@@ -88,10 +73,9 @@ def main():
         if submitted:
             data.extend([
                 match_number, team_number, alliance1_number, alliance2_number,
-                auto_leave, auto_CL1, auto_CL2, auto_CL3, auto_CL4, auto_Proc, auto_Net, auto_desc, auto_rp,
-                teleop_CL1, teleop_CL2, teleop_CL3, teleop_CL4, teleop_Proc, teleop_Net, tele_cycle_time_coral,
-                tele_cycle_time_Proc, tele_Cycle_time_Net, tele_priority, end_zone, end_SC, end_DC, coral_rp, hang_rp, 
-                win, loss,coop_bonus, match_type, driver_perf, tied, coral_miss, tele_cycle_option, notes
+                auto_leave, auto_desc, auto_fuel_count,
+                tele_priority, tele_cycle_option, tele_cycle_Count, teleop_fuel_count, 
+                traversal_rp, energized_rp, supercharged_rp, result, match_type, driver_perf, notes
             ])
 
             team = [team_number, alliance1_number, alliance2_number]
