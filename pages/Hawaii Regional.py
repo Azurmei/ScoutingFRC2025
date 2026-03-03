@@ -16,7 +16,7 @@ pass_flag = [False, False, False, False]
 
 
 def main():
-    st.title("Hawaii Regional Scouting [Input]")
+    st.title("Hawaii Regional Scouting")
     st.write("Please be sure all fields are filled in in order to submit data")
     st.divider()
     # Create a form with input fields
@@ -38,7 +38,8 @@ def main():
         auto_leave = st.toggle("Auto Leave Zone", value=False)
         auto_fuel_count = st.number_input("Auto Total Fuel", value=0)
         auto_desc = st.text_input("Auto desc/Pathing", value="N/A")
-        auto_path = st.selectbox("Auto Pathing Direction", ("RT", "LT", "RB", "LB"))
+        auto_path = st.text_input("Auto Pathing", value="N/A")
+        
 
         st.divider()
 
@@ -73,10 +74,10 @@ def main():
 
         if submitted:
             data.extend([
-                match_number, team_number, alliance1_number, alliance2_number,
-                auto_leave, auto_desc, auto_fuel_count,
+                match_number, match_type,team_number, alliance1_number, alliance2_number,
+                auto_leave, auto_desc, auto_fuel_count, auto_path,
                 tele_priority, tele_cycle_option, tele_cycle_Count, teleop_fuel_count, 
-                traversal_rp, energized_rp, supercharged_rp, result, match_type, driver_perf, notes
+                traversal_rp, energized_rp, supercharged_rp, end_hang, result, driver_perf, notes
             ])
 
             team = [team_number, alliance1_number, alliance2_number]
