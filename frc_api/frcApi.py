@@ -1,54 +1,47 @@
-import streamlit as st
 import requests
-from requests.auth import HTTPBasicAuth
+import streamlit as st
 
-def _get_first_config():
-    """Helper to fetch FIRST API credentials from secrets at runtime."""
-    secrets = st.secrets["first"]
-    return secrets["username"], secrets["auth_key"], secrets["base_url"], secrets["season"]
+# == Base Defines ==
+# API_KEY = st.secrets["frc_api"]
+API_KEY = st.secrets["first"]
+BASE_URL = 'https://frc-api.firstinspires.org/v3.0'
+SEASON = 2025
 
-def get_comp_teams(event_code: str) -> list:
-    """
-    Returns a list of team numbers attending an event.
-    Example event_code: 'HIHO'
-    """
-    username, auth_key, base_url, season = _get_first_config()
+
+# Set up the headers with the Authorization token
+headers = {
+    'Authorization': f'Basic {API_KEY}',
+    'Accept': 'application/json'  # Optional, depending on the API
+}
+
+def get_comp_teams(eventCode:str) -> list:
+
+    team_list = []    
+
+    # Get the competition teams
+    url = f'{BASE_URL}/{SEASON}/teams?eventCode={eventCode}'
+    response = requests.get(url, headers=headers)
+    if response.status_code == 200:
+        raw_data = response.json()
+
+        for teams in raw_data['teams']:
+            team_list.append(teams['teamNumber'])
+        
+        return team_list
+    
+def get_comp_ranking(eventCode:str) -> list:
+
     team_list = []
 
-    url = f"{base_url}/{season}/teams?eventCode={event_code}"
-    response = requests.get(url, auth=HTTPBasicAuth(username, auth_key))
-
+    # Get the competition ranking
+    url = f'{BASE_URL}/{SEASON}/rankings/{eventCode}'
+    response = requests.get(url, headers=headers)
     if response.status_code == 200:
         raw_data = response.json()
-        teams = raw_data.get("teams", [])
-        for team in teams:
-            team_list.append(team.get("teamNumber"))
-
+        rank_data = raw_data["Rankings"]
+    
+        for rank in rank_data:
+            team_data = {"team#":rank["teamNumber"], "wins":rank["wins"], "losses":rank["losses"], "ties":rank["ties"], "avg_score":rank["qualAverage"], "dq":rank["dq"], "matches":rank["matchesPlayed"]}
+            team_list.append(team_data)
+    
     return team_list
-
-def get_comp_ranking(event_code: str) -> list:
-    """
-    Returns ranking data for an event.
-    Example event_code: 'HIHO'
-    """
-    username, auth_key, base_url, season = _get_first_config()
-    ranking_list = []
-
-    url = f"{base_url}/{season}/rankings/{event_code}"
-    response = requests.get(url, auth=HTTPBasicAuth(username, auth_key))
-
-    if response.status_code == 200:
-        raw_data = response.json()
-        rankings = raw_data.get("Rankings", [])
-        for rank in rankings:
-            ranking_list.append({
-                "team#": rank.get("teamNumber"),
-                "rank": rank.get("rank"),
-                "wins": rank.get("wins"),
-                "losses": rank.get("losses"),
-                "ties": rank.get("ties"),
-                "matches": rank.get("matchesPlayed"),
-                "avg_score": rank.get("sortOrder1")
-            })
-
-    return ranking_list
