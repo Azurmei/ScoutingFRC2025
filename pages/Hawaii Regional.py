@@ -27,9 +27,9 @@ def main():
         # match data
         st.subheader("Match Data")
         match_number = st.number_input("Match Number", min_value=1, max_value=100, step=1, format="%d")
-        team_number = st.selectbox("Team Number", TEAM_LIST)
-        alliance1_number = st.selectbox("Alliance 1 Number", TEAM_LIST)
-        alliance2_number = st.selectbox("Alliance 2 Number", TEAM_LIST)
+        team_number = st.number_input("Team Number", value=0)
+        alliance1_number = st.number_input("Alliance 1 Number", value=0)
+        alliance2_number = st.number_input("Alliance 2 Number", value=0)
         match_type = st.selectbox("Type of Match", ("Qualification", "Practice", "Elimination"))
         st.divider()
 
