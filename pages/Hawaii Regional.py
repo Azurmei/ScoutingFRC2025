@@ -28,8 +28,8 @@ def main():
         st.subheader("Match Data")
         match_number = st.number_input("Match Number", min_value=1, max_value=100, step=1, format="%d")
         team_number = st.number_input("Team Number", value=0)
-        alliance1_number = st.number_input("Alliance 1 Number", value=0)
-        alliance2_number = st.number_input("Alliance 2 Number", value=0)
+        alliance1_number = st.number_input("Alliance Team 1 Number", value=0)
+        alliance2_number = st.number_input("Alliance Team 2 Number", value=0)
         match_type = st.selectbox("Type of Match", ("Qualification", "Practice", "Elimination"))
         st.divider()
 
@@ -37,8 +37,9 @@ def main():
         st.subheader("Autonomous Period")
         auto_leave = st.toggle("Auto Leave Zone", value=False)
         auto_fuel_count = st.number_input("Auto Total Fuel", value=0)
-        auto_desc = st.text_input("Auto Description / Notes", value="N/A")
-        
+        auto_desc = st.text_input("Auto desc/Pathing", value="N/A")
+        auto_path = st.selectbox("Auto Pathing Direction", ("RT", "LT", "RB", "LB"))
+
         st.divider()
 
         # teleop data
