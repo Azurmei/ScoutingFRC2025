@@ -2,10 +2,6 @@ import gspread
 import streamlit as st
 from google.oauth2.service_account import Credentials
 
-st.write("GOOGLE SHEETS KEYS:")
-st.write(st.secrets["google_sheets"].keys())
-st.stop()
-
 scopes = ["https://www.googleapis.com/auth/spreadsheets"]
 
 creds_info = dict(st.secrets["google_sheets"])
