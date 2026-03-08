@@ -74,10 +74,26 @@ def main():
 
         if submitted:
             data.extend([
-                match_number, match_type,team_number, alliance1_number, alliance2_number,
-                auto_leave, auto_desc, auto_fuel_count, auto_path,
-                tele_priority, tele_cycle_option, tele_cycle_Count, teleop_fuel_count, 
-                traversal_rp, energized_rp, supercharged_rp, end_hang, result, driver_perf, notes
+                match_number,
+                match_type,
+                team_number,
+                alliance1_number,
+                alliance2_number,
+                auto_leave,
+                auto_desc,
+                auto_fuel_count,
+                auto_path,
+                tele_priority,
+                tele_cycle_option,
+                tele_cycle_Count,
+                teleop_fuel_count,
+                traversal_rp,
+                energized_rp,
+                supercharged_rp,
+                end_hang,
+                result,
+                driver_perf,
+                notes
             ])
 
             team = [team_number, alliance1_number, alliance2_number]
