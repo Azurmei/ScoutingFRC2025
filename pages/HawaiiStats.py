@@ -6,7 +6,7 @@ from frc_api.frcApi import get_comp_ranking
 import matplotlib.pyplot as plt # type: ignore
 import numpy as np
 
-worksheet = sheet.worksheet("Hawaii")
+worksheet = sheet.worksheet("HAWAII_MATCHES")
 
 data = grab_all_data(worksheet)
 

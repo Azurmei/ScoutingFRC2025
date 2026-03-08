@@ -55,8 +55,8 @@ def main():
         # endgame data
         st.subheader("End Game")
         end_hang = st.selectbox("End Hang Level", ("None", "HL1", "HL2", "HL3"))
-        
-        driver_perf = st.text_input("Driver Performance", value="N/A")
+        driver_perf = st.text_input("Driver/bot Performance", value="N/A")
+        consistensy = st.selectbox("Consistency", ("Inconsistent", "Consistent", "Very Consistent"))
         st.divider()
 
         # end of match data
