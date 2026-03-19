@@ -5,45 +5,25 @@ pd.options.mode.chained_assignment = None
 pd.set_option('future.no_silent_downcasting', True)
 
 auto_score = {
-    'leave':    3,
-    'CL1':      3,
-    'CL2':      4,
-    'CL3':      6,
-    'CL4':      7,
-    'Proc':     6,
-    'Net':      4
+    'auto_fuel_count':      1,
+    'auto_hang':      15,
 }
 
 tele_score = {
-    'CL1':      2,
-    'CL2':      3,
-    'CL3':      4,
-    'CL4':      5,
-    'Proc':     6,
-    'Net':      4
-
+    'teleop_fuel_count':      1,
 }
 
 end_score = {
-    'Zone':     2,
-    'SC':       6,
-    'DC':       12
+    'end_hang':     10,
 }
 
-headers = ['auto_leave', 'auto_CL1', 'auto_CL2',	
-           'auto_CL3', 'auto_CL4', 'auto_Proc', 
-           'auto_Net', 'auto_desc', 'auto_rp',	
-           'tele_CL1', 'tele_CL2', 'tele_CL3', 
-           'tele_CL4',	'tele_Proc', 'tele_Net',
-           'tele_cycle_time_coral', 'tele_cycle_time_proc',
-           'tele_cycle_time_net',	'end_Zone',	'end_SC', 
-           'end_DC', 'coral_miss']
+headers = ['auto_leave','auto_hang',	'tele_fuel_count',	'end_hang',	]
 
 # --------
 # Get Priority of game piece for team
 # --------
 def get_priority(df:pd.DataFrame) -> str:
-    tmp = df["tele_priority"]
+    tmp = df["auto_hang","end_hang"]
     hash = Counter(tmp)
     return hash.most_common(1)[0][0]
 
@@ -51,7 +31,7 @@ def get_priority(df:pd.DataFrame) -> str:
 # Get average rp for each match from a team
 # --------
 def average_rp(df:pd.DataFrame) -> float:
-    selected_cols = ['auto_rp', 'coral_rp', 'hang_rp', 'win', 'loss']
+    selected_cols = ['energized_rp', 'supercharged_rp', 'traversal_rp', 'win', 'loss']
     selected_df = df[selected_cols]
     selected_df.loc[:,selected_cols] = selected_df.replace({'TRUE': 1, 'FALSE': 0})
     selected_df.loc[:,'win'] *= 3
@@ -60,33 +40,12 @@ def average_rp(df:pd.DataFrame) -> float:
     return average_row_sum
 
 # --------
-# Get success rate of coral
-# --------
-def get_coral_success(df:pd.DataFrame) -> float:
-    selected_cols = ['auto_CL1', 'auto_CL2',	
-           'auto_CL3', 'auto_CL4','tele_CL1', 'tele_CL2', 'tele_CL3', 
-           'tele_CL4', 'coral_miss']
-    selected_df = df[selected_cols].copy()
-    selected_df = selected_df.apply(pd.to_numeric, errors='coerce').fillna(0).astype(int)
-
-    total_success = selected_df[selected_cols[:-1]].sum().sum()
-
-    total_attempts = total_success + selected_df['coral_miss'].sum()
-
-    if total_attempts == 0:
-        return 0
-    
-    return (total_success/ total_attempts)* 100
-
-
-# --------
 # Get Average points scored in match - AUTO
 # --------
 def average_auto_points(df:pd.DataFrame) -> float:
-    selected_cols = ['auto_leave','auto_CL1', 'auto_CL2', 'auto_CL3', 
-                     'auto_CL4', 'auto_Proc', 'auto_Net']
+    selected_cols = ['auto_fuel_count', 'auto_hang']
 
-    col_int = ['auto_CL1', 'auto_CL2', 'auto_CL3', 'auto_CL4', 'auto_Proc', 'auto_Net']
+    col_int = ['auto_fuel_count', 'auto_hang']
 
     selected_df = df[selected_cols]
 
@@ -94,13 +53,9 @@ def average_auto_points(df:pd.DataFrame) -> float:
     
 
     # multiply scored with points 
-    selected_df.loc[:,'auto_leave'] = selected_df['auto_leave'].replace({'TRUE': 1, 'FALSE': 0})
-    selected_df.loc[:,'auto_CL1'] *= auto_score['CL1']
-    selected_df.loc[:,'auto_CL2'] *= auto_score['CL2']
-    selected_df.loc[:,'auto_CL3'] *= auto_score['CL3']
-    selected_df.loc[:,'auto_CL4'] *= auto_score['CL4']
-    selected_df.loc[:,'auto_Proc'] *= auto_score['Proc']
-    selected_df.loc[:,'auto_Net'] *= auto_score['Net']
+    selected_df.loc[:,'auto_fuel_count'] *= auto_score['auto_fuel_count']
+    selected_df.loc[:,'auto_hang'] *= auto_score['auto_hang']                                                                
+    
 
     # compute sums of each match auto
     row_sum = selected_df.sum(axis=1)
@@ -112,20 +67,15 @@ def average_auto_points(df:pd.DataFrame) -> float:
 # Get Average points scored in match - TELEOP
 # --------
 def average_teleop_points(df:pd.DataFrame) -> float:
-    selected_cols = ['tele_CL1', 'tele_CL2', 'tele_CL3', 'tele_CL4',
-                     'tele_Proc', 'tele_Net']
+    selected_cols = ['tele_fuel_count']
 
     selected_df = df[selected_cols]
 
     selected_df.loc[:,selected_cols] = selected_df[selected_cols].apply(lambda col: pd.to_numeric(col, errors='coerce').astype(int))
 
     # multiply scored with points
-    selected_df.loc[:,'tele_CL1'] *= tele_score['CL1']
-    selected_df.loc[:,'tele_CL2'] *= tele_score['CL2']
-    selected_df.loc[:,'tele_CL3'] *= tele_score['CL3']
-    selected_df.loc[:,'tele_CL4'] *= tele_score['CL4']
-    selected_df.loc[:,'tele_Proc'] *= tele_score['Proc']
-    selected_df.loc[:,'tele_Net'] *= tele_score['Net']
+    selected_df.loc[:,'tele_fuel_count'] *= tele_score['tele_fuel_count']
+    
 
     # compute sums of each match teleop
     row_sum = selected_df.sum(axis=1)
@@ -134,62 +84,43 @@ def average_teleop_points(df:pd.DataFrame) -> float:
     return average_row_sum
 
 
-# --------
-# End game priority
-# --------
-def endgame_priority(df:pd.DataFrame) -> str:
-    selected_cols = ['end_Zone', 'end_SC', 'end_DC']
-    tmp = df[selected_cols].sum()
-    end_priority = tmp.idxmax()
+    def end_score(df:pd.DataFrame) -> float:
+        selected_cols = ['end_hang']
 
-    match end_priority:
-        case 'end_Zone':
-            return "Zone Park"
-        case 'end_SC':
-            return "Shallow Carriage Hang"
-        case 'end_DC':
-            return "Deep Carriage Hang"
-        case _:
-            return "None"
+        selected_df = df[selected_cols]
+
+        selected_df.loc[:,selected_cols] = selected_df[selected_cols].apply(lambda col: pd.to_numeric(col, errors='coerce').astype(int))
+
+        # multiply scored with points
+        selected_df.loc[:,'end_hang'] *= end_score['end_hang']
+        
+
+        # compute sums of each match teleop
+        row_sum = selected_df.sum(axis=1)
+        average_row_sum = row_sum.mean()
+
+        return average_row_sum
+    
+    
 
 # --------
 # match vs points graph data
 # --------
 def match_point_graph_data(df:pd.DataFrame) -> pd.DataFrame:
-    selected_col = ['auto_leave','auto_CL1', 'auto_CL2', 'auto_CL3', 
-                     'auto_CL4', 'auto_Proc', 'auto_Net', 'tele_CL1', 
-                     'tele_CL2', 'tele_CL3', 'tele_CL4','tele_Proc', 
-                     'tele_Net', 'end_Zone', 'end_SC', 'end_DC']
+    selected_col = ['auto_fuel_count', 'tele_fuel_count',  'end_hang']
     
-    col_int = ['auto_CL1', 'auto_CL2', 'auto_CL3', 
-                     'auto_CL4', 'auto_Proc', 'auto_Net', 'tele_CL1', 
-                     'tele_CL2', 'tele_CL3', 'tele_CL4','tele_Proc', 
-                     'tele_Net']
+    col_int = ['auto_fuel_count','tele_fuel_count']
     
     selected_df = df[selected_col]
 
-    # replace bool values with points
-    selected_df.loc[:,'auto_leave'] = selected_df['auto_leave'].replace({'TRUE': 1, 'FALSE': 0})
-    selected_df.loc[:,'end_Zone'] = selected_df['end_Zone'].replace({'TRUE':2, 'FALSE': 0})
-    selected_df.loc[:,'end_SC'] = selected_df['end_SC'].replace({'TRUE': 6, 'FALSE': 0})
-    selected_df.loc[:,'end_DC'] = selected_df['end_DC'].replace({'TRUE': 12, 'FALSE': 0})
+  
 
     # convert cols from str to int
     selected_df.loc[:,col_int] = selected_df[col_int].apply(lambda col: pd.to_numeric(col, errors='coerce').astype(int))
 
     # score points from cols
-    selected_df.loc[:,'auto_CL1'] *= auto_score['CL1']
-    selected_df.loc[:,'auto_CL2'] *= auto_score['CL2']
-    selected_df.loc[:,'auto_CL3'] *= auto_score['CL3']
-    selected_df.loc[:,'auto_CL4'] *= auto_score['CL4']
-    selected_df.loc[:,'auto_Proc'] *= auto_score['Proc']
-    selected_df.loc[:,'auto_Net'] *= auto_score['Net']
-    selected_df.loc[:,'tele_CL1'] *= tele_score['CL1']
-    selected_df.loc[:,'tele_CL2'] *= tele_score['CL2']
-    selected_df.loc[:,'tele_CL3'] *= tele_score['CL3']
-    selected_df.loc[:,'tele_CL4'] *= tele_score['CL4']
-    selected_df.loc[:,'tele_Proc'] *= tele_score['Proc']
-    selected_df.loc[:,'tele_Net'] *= tele_score['Net']
+    selected_df.loc[:,'auto_fuel_count'] *= auto_score['auto_fuel_count']
+    selected_df.loc[:,'tele_fuel_count'] *= tele_score['tele_fuel_count']
 
     # return dataframe
     return selected_df.sum(axis=1)
@@ -263,10 +194,10 @@ def select_graph_by_match(team_data:pd.DataFrame, select_metric:str) -> pd.DataF
     return team_data[select_metric]
 
 # --------
-# Average coral scored in matches
+# Average fuel scored in matches
 # --------
-def average_coral_scored(df:pd.DataFrame) -> float:
-    selected_cols = ["auto_CL1", "auto_CL2", "auto_CL3", "auto_CL4", "tele_CL1", "tele_CL2", "tele_CL3", "tele_CL4"]
+def average_fuel_scored(df:pd.DataFrame) -> float:
+    selected_cols = ["auto_fuel_count", "tele_fuel_count",]
     selected_df = df[selected_cols]
     selected_df.loc[:,selected_cols] = selected_df[selected_cols].apply(lambda col: pd.to_numeric(col, errors='coerce').astype(int))
     selected_df = selected_df.reset_index(drop=True)

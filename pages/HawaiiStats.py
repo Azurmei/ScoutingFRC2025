@@ -14,14 +14,7 @@ df = pd.DataFrame(data[1:], columns=data[0])
 
 EVENT_CODE = 'HIHO'
 
-headers = ['auto_leave', 'auto_CL1', 'auto_CL2',	
-           'auto_CL3', 'auto_CL4', 'auto_Proc', 
-           'auto_Net', 'auto_desc', 'auto_rp',	
-           'tele_CL1', 'tele_CL2', 'tele_CL3', 
-           'tele_CL4',	'tele_Proc', 'tele_Net',
-           'tele_cycle_time_coral', 'tele_cycle_time_proc',
-           'tele_cycle_time_net',	'end_Zone',	'end_SC', 
-           'end_DC']
+headers = ['auto_leave', 'auto_hang', 'tele_fuel_count', 'end_hang']
 
 def main():
     st.title("Hawaii Regional Stats")
@@ -45,9 +38,7 @@ def main():
                 st.metric("Average RP per Match", round(average_rp(team_data), 2))
                 st.metric("Average Auto Score", round(average_auto_points(team_data), 2))
                 st.metric("Average Teleop Score", round(average_teleop_points(team_data), 2))
-                st.metric("Average coral count", round(average_coral_scored(team_data), 2))
-                st.metric("Coral Success %", round(get_coral_success(team_data), 2))
-                st.metric("End Game Priority", endgame_priority(team_data))
+                st.metric("End Game Priority", get_priority(team_data))
                 st.metric("Win %", round(win_percentage(team_data), 2))
                 st.metric("Highest Score", highest_score(team_data))
                 st.metric("Highest Score Alliance", highest_score_alliance(team_data))
@@ -88,53 +79,7 @@ def main():
     with col2:
         selected_data_graph = st.selectbox("Select data to graph", ("W/L/T", "Average Score"))
 
-        match selected_data_graph:
-            case "W/L/T":
-                team_numbers = [team['team#'] for team in ranking_data]
-                wins = [team['wins'] for team in ranking_data]
-                losses = [team['losses'] for team in ranking_data]
-                ties = [team['ties'] for team in ranking_data]
-
-                fig, ax = plt.subplots()
-
-                y = np.arange(len(team_numbers))
-
-                bar_width = 0.5
-
-                ax.barh(y - bar_width, wins, height=bar_width, label="wins", color="green")
-                ax.barh(y, losses, height=bar_width, label="losses", color="red")
-                ax.barh(y + bar_width, ties, height=bar_width, label="ties", color="yellow")
-
-                ax.set_xlabel("Count")
-                ax.set_ylabel("Team Numbers")
-                ax.set_title("W/L/T by Team")
-                ax.set_yticks(y)
-                ax.set_yticklabels(team_numbers)
-
-                ax.legend()
-
-                st.pyplot(fig)
-
-            case "Average Score":
-                team_numbers = [team['team#'] for team in ranking_data]
-                average_scores = [team['avg_score'] for team in ranking_data]
-
-                y = np.arange(len(team_numbers))
-                bar_width = 0.5
-
-                fig, ax = plt.subplots()
-                ax.barh(y, average_scores, height=bar_width, label="avg_score", color="skyblue")
-                ax.set_xlabel("Average Scores")
-                ax.set_ylabel("Team Numbers")
-                ax.set_title("Team Average Scores")
-                ax.set_yticks(y)
-                ax.set_yticklabels(team_numbers)
-
-                st.pyplot(fig)    
-
-            case _:
-                st.write("Please select data to graph")
-
+        
     st.divider()
     st.subheader("All Teams Raw Data")
     st.dataframe(df, hide_index=True)

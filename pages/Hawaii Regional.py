@@ -35,9 +35,9 @@ def main():
 
         # auto data
         st.subheader("Autonomous Period")
-        auto_leave = st.toggle("Auto Leave Zone", value=False)
         auto_fuel_count = st.number_input("Auto Total Fuel", value=0)
-        auto_desc = st.text_input("Auto desc/Pathing", value="N/A")
+        auto_hang = st.number_input("Auto Hang Level", value=0)
+        auto_desc = st.text_input("Auto desc", value="N/A")
         auto_path = st.text_input("Auto Pathing", value="N/A")
         
 
@@ -45,7 +45,7 @@ def main():
 
         # teleop data
         st.subheader("Teleop Period")
-        teleop_fuel_count = st.number_input("Teleop Fuel Count", value=0)
+        tele_fuel_count = st.number_input("Teleop Fuel Count", value=0)
         tele_cycle_option = st.toggle("Cycled in match?", value=False)
         tele_cycle_Count = st.number_input("Teleop Cycle Count", value=0)
         tele_priority = st.selectbox("Priority Cycles", ("Fuel", "Passing", "Defense"))
@@ -54,7 +54,9 @@ def main():
 
         # endgame data
         st.subheader("End Game")
-        end_hang = st.selectbox("End Hang Level", ("None", "HL1", "HL2", "HL3"))
+        
+        end_hang = st.number_input("End Hang Level", value=0)
+        end_hang_pos = st.selectbox("End Hang Position", ("None", "Center", "Left", "Right"))
         driver_perf = st.text_input("Driver/bot Performance", value="N/A")
         consistensy = st.selectbox("Consistency", ("Inconsistent", "Consistent", "Very Consistent"))
         st.divider()
@@ -79,18 +81,19 @@ def main():
                 team_number,
                 alliance1_number,
                 alliance2_number,
-                auto_leave,
                 auto_desc,
                 auto_fuel_count,
+                auto_hang,
                 auto_path,
                 tele_priority,
                 tele_cycle_option,
                 tele_cycle_Count,
-                teleop_fuel_count,
+                tele_fuel_count,
                 traversal_rp,
                 energized_rp,
                 supercharged_rp,
                 end_hang,
+                end_hang_pos,
                 result,
                 driver_perf,
                 notes
