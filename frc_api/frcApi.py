@@ -14,7 +14,7 @@ headers = {
     'Accept': 'application/json'  # Optional, depending on the API
 }
 
-def get_comp_teams(eventCode:str) -> list:
+def comp_teams(eventCode:str) -> list:
 
     team_list = []    
 
