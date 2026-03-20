@@ -17,19 +17,27 @@ end_score = {
     'end_hang':     10,
 }
 
-headers = ['auto_leave','auto_hang',	'tele_fuel_count',	'end_hang',	]
+headers = ['auto_leave','auto_hang','tele_fuel_count','end_hang',]
+
+# --------
+# Get Priority of game piece for team
+# --------
+def get_priority(df:pd.DataFrame) -> str:
+    tmp = df["game_priority"]
+    hash = Counter(tmp)
+    return hash.most_common(1)[0][0]
 
 # --------
 # Get average rp for each match from a team
 # --------
-#def average_rp(df:pd.DataFrame) -> float:
-    #selected_cols = ['energized_rp', 'supercharged_rp', 'traversal_rp', 'win', 'loss']
-    #selected_df = df[selected_cols]
-    #selected_df.loc[:,selected_cols] = selected_df.replace({'TRUE': 1, 'FALSE': 0})
-    #selected_df.loc[:,'win'] *= 3
-    #row_sums = selected_df.sum(axis=1)
-    #average_row_sum = row_sums.mean()
-    #return average_row_sum
+def average_rp(df:pd.DataFrame) -> float:
+    selected_cols = ['energized_rp', 'supercharged_rp', 'traversal_rp', 'win', 'loss']
+    selected_df = df[selected_cols]
+    selected_df.loc[:,selected_cols] = selected_df.replace({'TRUE': 1, 'FALSE': 0})
+    selected_df.loc[:,'win'] *= 3
+    row_sums = selected_df.sum(axis=1)
+    average_row_sum = row_sums.mean()
+    return average_row_sum
 
 # --------
 # Get Average points scored in match - AUTO
