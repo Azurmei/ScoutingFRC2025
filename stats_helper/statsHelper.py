@@ -22,14 +22,14 @@ headers = ['auto_leave','auto_hang',	'tele_fuel_count',	'end_hang',	]
 # --------
 # Get average rp for each match from a team
 # --------
-def average_rp(df:pd.DataFrame) -> float:
-    selected_cols = ['energized_rp', 'supercharged_rp', 'traversal_rp', 'win', 'loss']
-    selected_df = df[selected_cols]
-    selected_df.loc[:,selected_cols] = selected_df.replace({'TRUE': 1, 'FALSE': 0})
-    selected_df.loc[:,'win'] *= 3
-    row_sums = selected_df.sum(axis=1)
-    average_row_sum = row_sums.mean()
-    return average_row_sum
+#def average_rp(df:pd.DataFrame) -> float:
+    #selected_cols = ['energized_rp', 'supercharged_rp', 'traversal_rp', 'win', 'loss']
+    #selected_df = df[selected_cols]
+    #selected_df.loc[:,selected_cols] = selected_df.replace({'TRUE': 1, 'FALSE': 0})
+    #selected_df.loc[:,'win'] *= 3
+    #row_sums = selected_df.sum(axis=1)
+    #average_row_sum = row_sums.mean()
+    #return average_row_sum
 
 # --------
 # Get Average points scored in match - AUTO
