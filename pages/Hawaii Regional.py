@@ -58,7 +58,6 @@ def main():
         end_hang = st.number_input("End Hang Level", value=0)
         end_hang_pos = st.selectbox("End Hang Position", ("None", "Center", "Left", "Right"))
         driver_perf = st.text_input("Driver/bot Performance", value="N/A")
-        game_priority = st.selectbox("Game Priority", ("Fuel", "Traversal", "none"))
         consistensy = st.selectbox("Consistency", ("Inconsistent", "Consistent", "Very Consistent"))
         st.divider()
 
@@ -97,7 +96,6 @@ def main():
                 end_hang_pos,
                 result,
                 driver_perf,
-                game_priority,
                 consistensy,
                 notes
             ])
