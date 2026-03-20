@@ -29,7 +29,7 @@ def comp_teams(eventCode:str) -> list:
         
         return team_list
     
-def get_comp_ranking(eventCode:str) -> list:
+def comp_rank(eventCode:str) -> list:
 
     team_list = []
 

@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 from gs_client.gsClient import sheet, grab_all_data
 from stats_helper.statsHelper import *
-from frc_api.frcApi import comp_ranking
+from frc_api.frcApi import comp_rank
 import matplotlib.pyplot as plt # type: ignore
 import numpy as np
 
@@ -69,7 +69,7 @@ def main():
 
     col1, col2 = st.columns(2)
 
-    ranking_data = comp_ranking(EVENT_CODE)
+    ranking_data = comp_rank(EVENT_CODE)
     
     with col1:
         st.dataframe(ranking_data, hide_index=True)
