@@ -20,14 +20,6 @@ end_score = {
 headers = ['auto_leave','auto_hang',	'tele_fuel_count',	'end_hang',	]
 
 # --------
-# Get Priority of game piece for team
-# --------
-def get_priority(df:pd.DataFrame) -> str:
-    tmp = df["auto_hang","end_hang"]
-    hash = Counter(tmp)
-    return hash.most_common(1)[0][0]
-
-# --------
 # Get average rp for each match from a team
 # --------
 def average_rp(df:pd.DataFrame) -> float:

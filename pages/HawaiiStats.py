@@ -34,11 +34,9 @@ def main():
             col1, col2 = st.columns(2)
 
             with col1:
-                st.metric("Priority", get_priority(team_data))
                 st.metric("Average RP per Match", round(average_rp(team_data), 2))
                 st.metric("Average Auto Score", round(average_auto_points(team_data), 2))
                 st.metric("Average Teleop Score", round(average_teleop_points(team_data), 2))
-                st.metric("End Game Priority", get_priority(team_data))
                 st.metric("Win %", round(win_percentage(team_data), 2))
                 st.metric("Highest Score", highest_score(team_data))
                 st.metric("Highest Score Alliance", highest_score_alliance(team_data))
