@@ -1,14 +1,14 @@
 import streamlit as st
 from gs_client.gsClient import client, sheet, append_data, check_duplicate
 from data_validate.dataValidate import valid_data_count, check_empty, check_duplicate_alliance, check_pass_flag
-from frc_api.frcApi import get_comp_teams
+from frc_api.frcApi import comp_teams
 import time
 
 worksheet = sheet.worksheet("HAWAII_MATCHES")
 
 EVENT_CODE = "HIHO"
 
-TEAM_LIST = get_comp_teams(EVENT_CODE)
+TEAM_LIST = comp_teams(EVENT_CODE)
 
 CYCLE_SPEED = [x for x in range(0, 20)]
 
