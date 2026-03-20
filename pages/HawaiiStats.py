@@ -24,7 +24,7 @@ def main():
     st.write("Note: Team select is based on data input into the DB. No data will show if the DB is empty")
     selected_team = st.selectbox("Select a Team", unique_team_number)
     if selected_team in unique_team_number:
-        team_data = df[df["Team#"] == selected_team]
+        team_data = df[df["Team_data"] == selected_team]
         with st.container():
             st.subheader(f"Team {selected_team} Data")
 
