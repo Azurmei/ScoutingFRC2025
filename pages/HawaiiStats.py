@@ -20,11 +20,11 @@ def main():
     st.title("Hawaii Regional Stats")
     st.write("Note: These stats are based on scouting reports submitted to the GS")
     st.divider()
-    unique_team_number = df["comp_teams"].unique()
+    unique_team_number = df["team_number"].unique()
     st.write("Note: Team select is based on data input into the DB. No data will show if the DB is empty")
     selected_team = st.selectbox("Select a Team", unique_team_number)
     if selected_team in unique_team_number:
-        team_data = df[df["comp_teams"] == selected_team]
+        team_data = df[df["team_number"] == selected_team]
         with st.container():
             st.subheader(f"Team {selected_team} Data")
 
