@@ -1,3 +1,4 @@
+
 import pandas as pd
 from collections import Counter
 
@@ -24,22 +25,29 @@ headers = ['auto_leave','auto_hang','teleop_fuel_count','end_hang']
 # --------
 def get_priority(df:pd.DataFrame) -> str:
     tmp = df["game_priority"]
-    return Counter(tmp).most_common(1)[0][0]
+    hash = Counter(tmp)
+    return hash.most_common(1)[0][0]
 
 # --------
 # Get average rp for each match from a team
 # --------
 def average_rp(df:pd.DataFrame) -> float:
-    selected_df = df[['energized_rp', 'supercharged_rp', 'traversal_rp', 'result']].copy()
+    selected_cols = ['energized_rp', 'supercharged_rp', 'traversal_rp', 'result']
+    selected_df = df[selected_cols].copy()
 
     selected_df[['energized_rp','supercharged_rp','traversal_rp']] = \
-        selected_df[['energized_rp','supercharged_rp','traversal_rp']].replace({'TRUE':1,'FALSE':0})
+        selected_df[['energized_rp','supercharged_rp','traversal_rp']].replace(
+            {'TRUE':1,'FALSE':0}
+        )
 
-    selected_df['result'] = selected_df['result'].map({
-        "Win":3,
-        "tied":1,
-        "Loss":0
-    })
+    def result_to_rp(x):
+        if x == "Win":
+            return 3
+        elif x == "tied":
+            return 1
+        return 0
+
+    selected_df['result'] = selected_df['result'].apply(result_to_rp)
 
     return selected_df.sum(axis=1).mean()
 
@@ -47,9 +55,10 @@ def average_rp(df:pd.DataFrame) -> float:
 # Get Average points scored in match - AUTO
 # --------
 def average_auto_points(df:pd.DataFrame) -> float:
-    selected_df = df[['auto_fuel_count','auto_hang']].copy()
+    selected_cols = ['auto_fuel_count', 'auto_hang']
+    selected_df = df[selected_cols].copy()
 
-    selected_df = selected_df.apply(
+    selected_df[selected_cols] = selected_df[selected_cols].apply(
         lambda col: pd.to_numeric(col, errors='coerce').fillna(0)
     )
 
@@ -62,9 +71,10 @@ def average_auto_points(df:pd.DataFrame) -> float:
 # Get Average points scored in match - TELEOP
 # --------
 def average_teleop_points(df:pd.DataFrame) -> float:
-    selected_df = df[['teleop_fuel_count']].copy()
+    selected_cols = ['teleop_fuel_count']
+    selected_df = df[selected_cols].copy()
 
-    selected_df = selected_df.apply(
+    selected_df[selected_cols] = selected_df[selected_cols].apply(
         lambda col: pd.to_numeric(col, errors='coerce').fillna(0)
     )
 
@@ -76,9 +86,10 @@ def average_teleop_points(df:pd.DataFrame) -> float:
 # match vs points graph data
 # --------
 def match_point_graph_data(df:pd.DataFrame) -> pd.Series:
-    selected_df = df[['auto_fuel_count','teleop_fuel_count','end_hang']].copy()
+    selected_cols = ['auto_fuel_count', 'teleop_fuel_count', 'end_hang']
+    selected_df = df[selected_cols].copy()
 
-    selected_df = selected_df.apply(
+    selected_df[selected_cols] = selected_df[selected_cols].apply(
         lambda col: pd.to_numeric(col, errors='coerce').fillna(0)
     )
 
@@ -113,13 +124,15 @@ def win_percentage(df: pd.DataFrame) -> float:
 # Highest score alliance teams
 # --------
 def highest_score_alliance(df:pd.DataFrame) -> str:
+    alliance = ['alliance1', 'alliance2']
+
     scores_df = match_point_graph_data(df)
-    alliance_df = df[['alliance1','alliance2']]
+    alliance_df = df.loc[:,alliance]
 
-    max_index = scores_df.idxmax()
-    partners = alliance_df.loc[max_index]
+    max_score_index = scores_df.idxmax()
+    alliance_partners = alliance_df.loc[max_score_index]
 
-    return partners.to_string(index=False, header=False).replace("\n"," , ")
+    return alliance_partners.to_string(index=False, header=False).replace("\n", " , ")
 
 # --------
 # Highest Score
@@ -131,27 +144,34 @@ def highest_score(df:pd.DataFrame) -> float:
 # --------
 # Highest number of wins with alliance
 # --------
-def best_alliance(df:pd.DataFrame) -> pd.Series:
-    selected_df = df[['alliance1','alliance2','result']]
+def best_alliance(df:pd.DataFrame):
+    selected_cols = ['alliance1', 'alliance2', 'result']
+    selected_df = df[selected_cols]
+
     selected_df = selected_df[selected_df['result'] == "Win"]
 
-    team_wins = pd.concat([selected_df['alliance1'],selected_df['alliance2']]).value_counts()
+    team_wins = pd.concat(
+        [selected_df['alliance1'], selected_df['alliance2']]
+    ).value_counts()
+
     return team_wins.sort_values(ascending=False)
 
-def select_graph_by_match(team_data:pd.DataFrame, select_metric:str) -> pd.Series:
-    return pd.to_numeric(team_data[select_metric], errors="coerce").fillna(0)
+def select_graph_by_match(team_data:pd.DataFrame, select_metric:str):
+    return pd.to_numeric(team_data[select_metric], errors='coerce')
 
 # --------
 # Average fuel scored in matches
 # --------
 def average_fuel_scored(df:pd.DataFrame) -> float:
-    selected_df = df[['auto_fuel_count','teleop_fuel_count']].copy()
+    selected_cols = ["auto_fuel_count", "teleop_fuel_count"]
+    selected_df = df[selected_cols].copy()
 
-    selected_df = selected_df.apply(
+    selected_df[selected_cols] = selected_df[selected_cols].apply(
         lambda col: pd.to_numeric(col, errors='coerce').fillna(0)
     )
 
-    total = selected_df.sum().sum()
-    matches = len(selected_df)
+    total_sum = selected_df.sum().sum()
+    num_matches = len(selected_df)
 
-    return total / matches if matches > 0 else 0
+    return total_sum / num_matches if num_matches > 0 else 0
+
