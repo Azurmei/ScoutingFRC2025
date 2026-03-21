@@ -128,31 +128,23 @@ def match_point_graph_data(df:pd.DataFrame) -> pd.DataFrame:
 # --------
 # match vs W/L graph data
 # --------
-def match_win_loss_graph_data(df:pd.DataFrame) -> pd.DataFrame:
-    selected_col = ['win', 'loss']
-    selected_df = df[selected_col]
-
-    selected_df.loc[:,'win'] = selected_df['win'].replace({'TRUE': 1, 'FALSE': 0})
-    selected_df.loc[:,'loss'] = selected_df['loss'].replace({'TRUE': -1, 'FALSE': 0})
-    
-    selected_df.loc[:,'result'] = selected_df['win'] + selected_df['loss']
-
-    return selected_df['result']
-
+def match_win_loss_graph_data(df: pd.DataFrame) -> pd.Series:
+    return df['result'].map({
+        "Win": 1,
+        "Loss": -1,
+        "tied": 0
+    })
 
 # --------
 # W/L ratio data
 # --------
-def win_percentage(df:pd.DataFrame) -> float:
-    selected_col = ['win']
-    selected_df = df[selected_col]
+def win_percentage(df: pd.DataFrame) -> float:
+    total = len(df)
+    if total == 0:
+        return 0.0
 
-    selected_df.loc[:,'win'] = selected_df['win'].replace({'TRUE': 1, 'FALSE': 0})
-
-    wins = selected_df['win'].sum()
-    total = len(selected_df['win'])
-    
-    return (wins/total) * 100
+    wins = df['result'].apply(lambda x: 1 if x == "Win" else 0).sum()
+    return (wins / total) * 100
 
 
 # --------
