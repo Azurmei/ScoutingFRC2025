@@ -102,7 +102,7 @@ def win_percentage(df: pd.DataFrame) -> float:
 # Highest score alliance teams
 # --------
 def highest_score_alliance(df:pd.DataFrame) -> str:
-    alliance = ['alliance1', 'alliance2']
+    alliance = ['alliance1_number', 'alliance2_number']
 
     scores_df = match_point_graph_data(df)
     alliance_df = df.loc[:,alliance]
