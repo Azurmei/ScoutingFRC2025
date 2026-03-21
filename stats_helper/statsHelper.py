@@ -11,7 +11,7 @@ auto_score = {
 }
 
 tele_score = {
-    'teleop_fuel_count': 1,
+    'tele_fuel_count': 1,
 }
 
 end_score = {
@@ -28,28 +28,6 @@ def get_priority(df:pd.DataFrame) -> str:
     hash = Counter(tmp)
     return hash.most_common(1)[0][0]
 
-# --------
-# Get average rp for each match from a team
-# --------
-def average_rp(df:pd.DataFrame) -> float:
-    selected_cols = ['energized_rp', 'supercharged_rp', 'traversal_rp', 'result']
-    selected_df = df[selected_cols].copy()
-
-    selected_df[['energized_rp','supercharged_rp','traversal_rp']] = \
-        selected_df[['energized_rp','supercharged_rp','traversal_rp']].replace(
-            {'TRUE':1,'FALSE':0}
-        )
-
-    def result_to_rp(x):
-        if x == "Win":
-            return 3
-        elif x == "tied":
-            return 1
-        return 0
-
-    selected_df['result'] = selected_df['result'].apply(result_to_rp)
-
-    return selected_df.sum(axis=1).mean()
 
 # --------
 # Get Average points scored in match - AUTO
