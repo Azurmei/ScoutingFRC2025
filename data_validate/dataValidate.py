@@ -1,4 +1,19 @@
-DATA_LEN = 20
+DATA_LEN = 22
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 def valid_data_count(data:list) -> bool:
     # checks to make sure the count of data is 32
