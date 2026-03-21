@@ -10,7 +10,7 @@ auto_score = {
 }
 
 tele_score = {
-    'teleop_fuel_count':      1,
+    'tele_fuel_count':      1,
 }
 
 end_score = {
