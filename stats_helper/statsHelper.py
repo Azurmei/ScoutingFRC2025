@@ -71,14 +71,14 @@ def average_auto_points(df:pd.DataFrame) -> float:
 # Get Average points scored in match - TELEOP
 # --------
 def average_teleop_points(df:pd.DataFrame) -> float:
-    selected_cols = ['teleop_fuel_count']
+    selected_cols = ['tele_fuel_count']
     selected_df = df[selected_cols].copy()
 
     selected_df[selected_cols] = selected_df[selected_cols].apply(
         lambda col: pd.to_numeric(col, errors='coerce').fillna(0)
     )
 
-    selected_df['teleop_fuel_count'] *= tele_score['teleop_fuel_count']
+    selected_df['tele_fuel_count'] *= tele_score['tele_fuel_count']
 
     return selected_df.sum(axis=1).mean()
 
@@ -86,7 +86,7 @@ def average_teleop_points(df:pd.DataFrame) -> float:
 # match vs points graph data
 # --------
 def match_point_graph_data(df:pd.DataFrame) -> pd.Series:
-    selected_cols = ['auto_fuel_count', 'teleop_fuel_count', 'end_hang']
+    selected_cols = ['auto_fuel_count', 'tele_fuel_count', 'end_hang']
     selected_df = df[selected_cols].copy()
 
     selected_df[selected_cols] = selected_df[selected_cols].apply(
@@ -94,7 +94,7 @@ def match_point_graph_data(df:pd.DataFrame) -> pd.Series:
     )
 
     selected_df['auto_fuel_count'] *= auto_score['auto_fuel_count']
-    selected_df['teleop_fuel_count'] *= tele_score['teleop_fuel_count']
+    selected_df['tele_fuel_count'] *= tele_score['tele_fuel_count']
     selected_df['end_hang'] *= end_score['end_hang']
 
     return selected_df.sum(axis=1)
@@ -163,7 +163,7 @@ def select_graph_by_match(team_data:pd.DataFrame, select_metric:str):
 # Average fuel scored in matches
 # --------
 def average_fuel_scored(df:pd.DataFrame) -> float:
-    selected_cols = ["auto_fuel_count", "teleop_fuel_count"]
+    selected_cols = ["auto_fuel_count", "tele_fuel_count"]
     selected_df = df[selected_cols].copy()
 
     selected_df[selected_cols] = selected_df[selected_cols].apply(
