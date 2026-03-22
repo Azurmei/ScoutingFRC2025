@@ -40,7 +40,7 @@ def main():
                 st.metric("Highest Score", highest_score(team_data))
                 st.metric("Highest Score Alliance", highest_score_alliance(team_data))
                 st.write("Highest wins based on alliance")
-                st.table(best_alliance(team_data))
+                st.metric("Best Alliance", best_alliance(team_data).iloc[0])
             
             with col2:
                 st.subheader(f"Data Graphs of Team {selected_team}")
