@@ -123,13 +123,13 @@ def highest_score(df:pd.DataFrame) -> float:
 # Highest number of wins with alliance
 # --------
 def best_alliance(df:pd.DataFrame):
-    selected_cols = ['alliance1', 'alliance2', 'result']
+    selected_cols = ['alliance1_number', 'alliance2_number', 'result']
     selected_df = df[selected_cols]
 
     selected_df = selected_df[selected_df['result'] == "Win"]
 
     team_wins = pd.concat(
-        [selected_df['alliance1'], selected_df['alliance2']]
+        [selected_df['alliance1_number'], selected_df['alliance2_number']]
     ).value_counts()
 
     return team_wins.sort_values(ascending=False)
