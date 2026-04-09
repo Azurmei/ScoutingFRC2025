@@ -1,14 +1,14 @@
 import streamlit as st
 from gs_client.gsClient import client, sheet, append_data, check_duplicate
 from data_validate.dataValidate import valid_data_count, check_empty, check_duplicate_alliance, check_pass_flag
-from frc_api.frcApi import get_comp_teams
+from frc_api.frcApi import comp_teams
 import time
 
 worksheet = sheet.worksheet("VEGAS_MATCHES")
 
 EVENT_CODE = "NVLV"
 
-TEAM_LIST = get_comp_teams(EVENT_CODE)
+TEAM_LIST = comp_teams(EVENT_CODE)
 
 CYCLE_SPEED = [x for x in range(0, 20)]
 
@@ -16,7 +16,7 @@ pass_flag = [False, False, False, False]
 
 
 def main():
-    st.title("Vegas Regional Scouting [Input]")
+    st.title("Hawaii Regional Scouting")
     st.write("Please be sure all fields are filled in in order to submit data")
     st.divider()
     # Create a form with input fields
@@ -27,57 +27,46 @@ def main():
         # match data
         st.subheader("Match Data")
         match_number = st.number_input("Match Number", min_value=1, max_value=100, step=1, format="%d")
-        team_number = st.selectbox("Team Number", TEAM_LIST)
-        alliance1_number = st.selectbox("Alliance 1 Number", TEAM_LIST)
-        alliance2_number = st.selectbox("Alliance 2 Number", TEAM_LIST)
+        team_number = st.number_input("Team Number", value=0)
+        alliance1_number = st.number_input("Alliance Team 1 Number", value=0)
+        alliance2_number = st.number_input("Alliance Team 2 Number", value=0)
         match_type = st.selectbox("Type of Match", ("Qualification", "Practice", "Elimination"))
         st.divider()
 
         # auto data
         st.subheader("Autonomous Period")
-        auto_leave = st.toggle("Auto Leave Zone", value=False)
-        auto_CL1 = st.number_input("Auto CL1", value=0)
-        auto_CL2 = st.number_input("Auto CL2", value=0)
-        auto_CL3 = st.number_input("Auto CL3", value=0)
-        auto_CL4 = st.number_input("Auto CL4", value=0)
-        auto_Proc = st.number_input("Auto Processor", value=0)
-        auto_Net = st.number_input("Auto Net", value=0)
-        auto_desc = st.text_input("Auto Description / Notes", value="N/A")
-        auto_rp = st.toggle("Auto RP", value=False)
+        auto_fuel_count = st.number_input("Auto Total Fuel", value=0)
+        auto_hang = st.number_input("Auto Hang Level", value=0)
+        auto_desc = st.text_input("Auto desc", value="N/A")
+        auto_path = st.text_input("Auto Pathing", value="N/A")
+        
+
         st.divider()
 
         # teleop data
         st.subheader("Teleop Period")
-        teleop_CL1 = st.number_input("Teleop CL1", value=0)
-        teleop_CL2 = st.number_input("Teleop CL2", value=0)
-        teleop_CL3 = st.number_input("Teleop CL3", value=0)
-        teleop_CL4 = st.number_input("Teleop CL4", value=0)
-        coral_miss = st.number_input("Missed Coral", value=0)
-        teleop_Proc = st.number_input("Teleop Processor", value=0)
-        teleop_Net = st.number_input("Teleop Net", value=0)
-        tele_cycle_time_coral = st.selectbox("Teleop Cycle Time Coral", CYCLE_SPEED)
-        tele_cycle_time_Proc = st.selectbox("Teleop Cycle Time Processor", CYCLE_SPEED)
-        tele_Cycle_time_Net = st.selectbox("Teleop Cycle Time Net", CYCLE_SPEED)
-        tele_priority = st.selectbox("Priority Cycles", ("Coral", "Algae", "Defense"))
+        tele_fuel_count = st.number_input("Teleop Fuel Count", value=0)
         tele_cycle_option = st.toggle("Cycled in match?", value=False)
+        tele_cycle_Count = st.number_input("Teleop Cycle Count", value=0)
+        tele_priority = st.selectbox("Priority Cycles", ("Fuel", "Passing", "Defense"))
+        
         st.divider()
 
         # endgame data
         st.subheader("End Game")
-        end_zone = st.toggle("Zone Park", value=False)
-        end_SC = st.toggle("Shallow Carriage Hang", value=False)
-        end_DC = st.toggle("Deep Carriage Hang", value=False)
-        driver_perf = st.text_input("Driver Performance", value="N/A")
+        
+        end_hang = st.number_input("End Hang Level", value=0)
+        end_hang_pos = st.selectbox("End Hang Position", ("None", "Center", "Left", "Right"))
+        driver_perf = st.text_input("Driver/bot Performance", value="N/A")
+        consistensy = st.selectbox("Consistency", ("Inconsistent", "Consistent", "Very Consistent"))
         st.divider()
 
         # end of match data
         st.subheader("End of Match")
-        coral_rp = st.toggle("Coral RP", value=False)
-        hang_rp = st.toggle("Hang RP", value=False)
-        win = st.toggle("Win", value=False)
-        loss = st.toggle("Loss", value=False)
-        coop_bonus = st.toggle("Coop Bonus", value=False)
-        tied = st.toggle("Tied", value=False)
+        energized_rp = st.toggle("Energized RP", value=False)
+        supercharged_rp = st.toggle("Supercharged RP", value=False)
+        traversal_rp = st.toggle("Traversal RP", value=False)
+        result = st.selectbox("Match Result", ("Win", "Loss","tied"))
         st.divider()
         
         # Other comments
@@ -87,11 +76,28 @@ def main():
 
         if submitted:
             data.extend([
-                match_number, team_number, alliance1_number, alliance2_number,
-                auto_leave, auto_CL1, auto_CL2, auto_CL3, auto_CL4, auto_Proc, auto_Net, auto_desc, auto_rp,
-                teleop_CL1, teleop_CL2, teleop_CL3, teleop_CL4, teleop_Proc, teleop_Net, tele_cycle_time_coral,
-                tele_cycle_time_Proc, tele_Cycle_time_Net, tele_priority, end_zone, end_SC, end_DC, coral_rp, hang_rp, 
-                win, loss,coop_bonus, match_type, driver_perf, tied, coral_miss, tele_cycle_option, notes
+                match_number,
+                match_type,
+                team_number,
+                alliance1_number,
+                alliance2_number,
+                auto_desc,
+                auto_fuel_count,
+                auto_hang,
+                auto_path,
+                tele_priority,
+                tele_cycle_option,
+                tele_cycle_Count,
+                tele_fuel_count,
+                traversal_rp,
+                energized_rp,
+                supercharged_rp,
+                end_hang,
+                end_hang_pos,
+                result,
+                driver_perf,
+                consistensy,
+                notes
             ])
 
             team = [team_number, alliance1_number, alliance2_number]
