@@ -16,7 +16,7 @@ pass_flag = [False, False, False, False]
 
 
 def main():
-    st.title("Hawaii Regional Scouting")
+    st.title("Vegas Regional Scouting")
     st.write("Please be sure all fields are filled in in order to submit data")
     st.divider()
     # Create a form with input fields

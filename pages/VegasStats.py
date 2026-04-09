@@ -17,7 +17,7 @@ EVENT_CODE = 'NVLV'
 headers = ['auto_leave', 'auto_hang', 'tele_fuel_count', 'end_hang']
 
 def main():
-    st.title("Vegas Regional Stats")
+    st.title("Hawaii Regional Stats")
     st.write("Note: These stats are based on scouting reports submitted to the GS")
     st.divider()
     unique_team_number = df["team_number"].unique()
